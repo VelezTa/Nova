@@ -2,7 +2,7 @@
 
 ## Product Summary
 
-Astra is a positive astrology-inspired mobile app for daily guidance, self-knowledge, palm reading, AI conversations, weekly predictions, and couple compatibility. It blends symbolic astrology, premium visual design, emotionally safe AI, and shareable daily content.
+Nova is a positive astrology-inspired mobile app for daily guidance, self-knowledge, palm reading, AI conversations, weekly predictions, and couple compatibility. It blends symbolic astrology, premium visual design, emotionally safe AI, and shareable daily content.
 
 The app is for entertainment, reflection, personal wellness, symbolic guidance, emotional clarity, and daily inspiration. It must never present predictions as guaranteed facts.
 
@@ -21,7 +21,7 @@ Users need a polished, positive, safe app that gives emotionally useful symbolic
 
 ## Solution
 
-Astra provides a premium mobile experience with:
+Nova provides a premium mobile experience with:
 
 - A personalized cosmic profile.
 - A daily card users want to save and share.
@@ -33,7 +33,7 @@ Astra provides a premium mobile experience with:
 
 ## Core Value Proposition
 
-Astra helps users start each day with beautiful, positive, symbolic guidance that feels personal, emotionally safe, and worth sharing.
+Nova helps users start each day with beautiful, positive, symbolic guidance that feels personal, emotionally safe, and worth sharing.
 
 ## Main Use Cases
 
@@ -134,7 +134,7 @@ Use RevenueCat for cross-platform subscriptions, purchases, entitlements, and re
 ## Launch Assumptions
 
 - The app launches as a mobile-first iOS and Android product.
-- The first launch uses the working name Astra.
+- The first launch uses the working name Nova.
 - AI is served through backend functions, not directly from the client.
 - Supabase stores user profile, readings, chat history, subscriptions, purchases, share events, notifications, and preferences.
 - Visual direction is based on the written cosmic reference until the actual image is reviewed.

@@ -2,7 +2,7 @@
 
 ## Strategy
 
-Astra should use a freemium model with a strong free hook and most deep value behind paid access. Monetization must be ethical, positive, and never fear-based.
+Nova should use a freemium model with a strong free hook and most deep value behind paid access. Monetization must be ethical, positive, and never fear-based.
 
 ## Free Tier
 

@@ -1,0 +1,24 @@
+{
+  "expo": {
+    "name": "Nova",
+    "slug": "nova",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "scheme": "nova",
+    "userInterfaceStyle": "automatic",
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "predictiveBackGestureEnabled": false
+    },
+    "web": {
+      "bundler": "metro",
+      "output": "static"
+    },
+    "plugins": ["expo-router"],
+    "experiments": {
+      "typedRoutes": true
+    }
+  }
+}

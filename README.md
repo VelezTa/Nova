@@ -1,14 +1,16 @@
-# Astra
+# Nova
 
-Astra is the working name for a React Native, Expo, and TypeScript mobile app for positive astrology-inspired guidance, palm reading, daily predictions, AI chat, weekly predictions, and couple compatibility.
+Nova is the working name for a React Native, Expo, and TypeScript mobile app for positive astrology-inspired guidance, palm reading, daily predictions, AI chat, weekly predictions, and couple compatibility.
 
 The product is positioned as a positive daily cosmic guide for self-knowledge, emotional clarity, astrology, palm reading, and relationship compatibility.
 
 ## Current Phase
 
-Phase 1: Documentation.
+Phase 2: Project setup.
 
-This repository currently contains planning documents only. Do not build production app features until the documentation is reviewed and approved.
+Phase 1 documentation is approved. Phase 2 is limited to the Expo TypeScript app shell, Expo Router, base tooling, local startup instructions, and secret-free environment templates.
+
+Do not build production app features until the relevant later phase is explicitly approved. Phase 2 must not implement authentication, Supabase database logic, AI calls, payments, subscriptions, notifications, palm upload, image analysis, or final production screens.
 
 ## Planned Tech Stack
 
@@ -48,7 +50,7 @@ This repository currently contains planning documents only. Do not build product
 
 ## Safety Policy Summary
 
-Astra offers symbolic, astrology-inspired guidance for reflection and entertainment. It does not provide medical, legal, financial, or emergency advice.
+Nova offers symbolic, astrology-inspired guidance for reflection and entertainment. It does not provide medical, legal, financial, or emergency advice.
 
 All generated content must be positive, reflective, non-deterministic, and emotionally safe. The app must never predict or imply death, illness, betrayal certainty, infidelity certainty, pregnancy outcomes, curses, accidents, violence, diagnosis, dangerous events, or fear-based warnings.
 
@@ -61,9 +63,40 @@ All generated content must be positive, reflective, non-deterministic, and emoti
 5. Start Phase 2 by creating the Expo TypeScript project only within the setup boundaries in `PLAN.md`.
 6. Build one phase at a time using `PLAN.md` and verify using `QA-CHECKLIST.md`.
 
+## Local Development
+
+Install dependencies:
+
+```sh
+npm install
+```
+
+Start the Expo dev server:
+
+```sh
+npm run start
+```
+
+Run on a local platform target when available:
+
+```sh
+npm run ios
+npm run android
+npm run web
+```
+
+Verify the setup:
+
+```sh
+npm run typecheck
+npm run lint
+```
+
+Environment variables are documented in `.env.example`. Copy it to `.env` only for local placeholder configuration, and do not commit real secrets.
+
 ## Important Notes
 
-- "Astra" is a working name and may change.
+- "Nova" is a working name and may change.
 - The current design direction is based on written visual requirements because the reference image is pending.
 - No production app code should exist in this repository during Phase 1.
 - Compatibility is included in MVP v1.

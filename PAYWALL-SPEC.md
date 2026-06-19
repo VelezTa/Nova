@@ -109,7 +109,7 @@ Each paywall must include:
 - Restore purchases.
 - Privacy Policy link placeholder.
 - Terms of Use link placeholder.
-- Disclaimer: Astra offers symbolic guidance for reflection and entertainment, not medical, legal, financial, or emergency advice.
+- Disclaimer: Nova offers symbolic guidance for reflection and entertainment, not medical, legal, financial, or emergency advice.
 
 ## App Store Compliance Notes
 

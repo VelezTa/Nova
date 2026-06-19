@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-Astra is the working name for a cross-platform mobile app for positive astrology-inspired guidance, palm reading, daily and weekly predictions, AI conversations, and couple compatibility.
+Nova is the working name for a cross-platform mobile app for positive astrology-inspired guidance, palm reading, daily and weekly predictions, AI conversations, and couple compatibility.
 
 The product is for entertainment, reflection, personal wellness, symbolic guidance, emotional clarity, and daily inspiration. It must never present predictions as guaranteed facts.
 
@@ -17,7 +17,7 @@ Future agents must not build production app features until the documentation is 
 - Think before coding. State assumptions when they affect implementation.
 - Keep changes surgical. Touch only files required by the current request.
 - Prefer simple, practical documentation and implementation plans over speculative architecture.
-- Do not hardcode branding deeply. "Astra" is the working name and may change.
+- Do not hardcode branding deeply. "Nova" is the working name and may change.
 - Treat user safety rules as product requirements, not copy suggestions.
 - If a request conflicts with the safety policy, preserve safety and explain the conflict.
 
@@ -32,7 +32,7 @@ Future agents must not build production app features until the documentation is 
 
 ## Required Safety Requirements
 
-Astra must never mention, predict, imply, suggest, or generate content related to death, betrayal certainty, infidelity certainty, illness, medical outcomes, accidents, violence, pregnancy predictions, curses, dark spiritual threats, evil eye claims as certainty, someone doing something against the user, legal advice as certainty, financial advice as certainty, psychological diagnosis, medical diagnosis, dangerous predictions, fear-based warnings, or catastrophic predictions.
+Nova must never mention, predict, imply, suggest, or generate content related to death, betrayal certainty, infidelity certainty, illness, medical outcomes, accidents, violence, pregnancy predictions, curses, dark spiritual threats, evil eye claims as certainty, someone doing something against the user, legal advice as certainty, financial advice as certainty, psychological diagnosis, medical diagnosis, dangerous predictions, fear-based warnings, or catastrophic predictions.
 
 The app must never scare the user, create paranoia, or imply that harmful events are guaranteed.
 
@@ -86,7 +86,7 @@ Until the app is implemented, keep planning documents at the repository root:
 ## How To Update Documents
 
 - Update the smallest relevant document.
-- Keep wording specific to Astra.
+- Keep wording specific to Nova.
 - Add acceptance criteria when changing feature behavior.
 - Add safety language to every AI-related feature change.
 - Keep pricing as placeholders until business approval.

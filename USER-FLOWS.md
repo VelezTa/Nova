@@ -2,7 +2,7 @@
 
 ## First App Open
 
-1. User opens Astra.
+1. User opens Nova.
 2. App shows a polished cosmic welcome with brief value proposition.
 3. User sees soft disclaimer that guidance is symbolic and for reflection.
 4. User starts onboarding.

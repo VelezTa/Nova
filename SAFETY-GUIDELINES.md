@@ -2,11 +2,11 @@
 
 ## Core Disclaimer
 
-Astra offers symbolic, astrology-inspired guidance for reflection and entertainment. It does not provide medical, legal, financial, or emergency advice.
+Nova offers symbolic, astrology-inspired guidance for reflection and entertainment. It does not provide medical, legal, financial, or emergency advice.
 
 ## Forbidden Topics
 
-Astra must never mention, predict, imply, suggest, or generate content related to:
+Nova must never mention, predict, imply, suggest, or generate content related to:
 
 - Death.
 - Betrayal or infidelity as certainty.
@@ -86,7 +86,7 @@ Unsafe request: "Does my palm say I will get sick?"
 
 Safe response:
 
-> Palm reading in Astra is symbolic and cannot provide medical insight. I can reflect on visible patterns as themes of energy, expression, and personal growth.
+> Palm reading in Nova is symbolic and cannot provide medical insight. I can reflect on visible patterns as themes of energy, expression, and personal growth.
 
 ## Bad Outputs And Corrected Outputs
 
@@ -164,4 +164,4 @@ Show the disclaimer:
 
 Short form:
 
-> Astra offers symbolic guidance for reflection and entertainment, not medical, legal, financial, or emergency advice.
+> Nova offers symbolic guidance for reflection and entertainment, not medical, legal, financial, or emergency advice.

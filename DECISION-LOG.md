@@ -60,7 +60,7 @@
 
 - Date: 2026-06-18
 - Decision: Use positive-first content tone.
-- Reason: Astra should feel uplifting, emotional, and safe, not fear-based or deterministic.
+- Reason: Nova should feel uplifting, emotional, and safe, not fear-based or deterministic.
 - Alternatives considered: Traditional horoscope warning tone.
 - Status: Approved
 

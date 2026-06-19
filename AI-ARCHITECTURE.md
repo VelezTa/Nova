@@ -2,7 +2,7 @@
 
 ## AI Responsibilities
 
-Astra uses AI to produce symbolic, positive, non-deterministic content for:
+Nova uses AI to produce symbolic, positive, non-deterministic content for:
 
 - AI chat.
 - Daily card generation.

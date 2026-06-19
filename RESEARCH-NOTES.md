@@ -14,7 +14,7 @@ Useful because:
 - Good reference for future implementation structure.
 
 Limitations:
-- Examples are general-purpose and should not define Astra product architecture by themselves.
+- Examples are general-purpose and should not define Nova product architecture by themselves.
 
 ### Supabase Expo User Management
 
@@ -25,7 +25,7 @@ Useful because:
 - Reinforces use of Supabase client, AsyncStorage, and mobile session handling.
 
 Limitations:
-- User-management example is not an Astra architecture.
+- User-management example is not an Nova architecture.
 - Requires safety, RLS, storage, and AI patterns specific to this app.
 
 ### RevenueCat React Native Purchases
@@ -37,7 +37,7 @@ Useful because:
 - Supports iOS and Android subscription and purchase flows.
 
 Limitations:
-- Product and entitlement strategy still needs Astra-specific design.
+- Product and entitlement strategy still needs Nova-specific design.
 
 ### react-native-view-shot
 
@@ -264,7 +264,7 @@ Do not adopt:
 - Which astrology calculation approach should be used for birth chart depth: library, API, or hybrid?
 - Should Plus include one full palm reading per billing period or unlimited basic palm readings?
 - What final price points should be used for Plus, Pro, and one-time purchases?
-- What is the final brand name if Astra changes?
+- What is the final brand name if Nova changes?
 
 ### Blocks Later Design Or Product Phases
 

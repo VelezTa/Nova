@@ -2,9 +2,9 @@
 
 ## Onboarding
 
-Purpose: Collect required personalization data and introduce Astra as a safe symbolic guidance app.
+Purpose: Collect required personalization data and introduce Nova as a safe symbolic guidance app.
 
-User story: As a new user, I want to enter my birth and interest details so Astra can personalize my experience.
+User story: As a new user, I want to enter my birth and interest details so Nova can personalize my experience.
 
 Inputs:
 - Name.

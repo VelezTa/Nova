@@ -6,7 +6,7 @@ The current visual baseline is derived from the written reference direction. The
 
 ## Brand Personality
 
-Astra should feel mystical, premium, emotional, positive, elegant, feminine, modern, highly visual, shareable, and App Store-ready.
+Nova should feel mystical, premium, emotional, positive, elegant, feminine, modern, highly visual, shareable, and App Store-ready.
 
 It should not feel dark in a scary way, cheap, fear-based, cluttered, generic, or occult-heavy.
 
@@ -130,7 +130,7 @@ Visual requirements:
 - Large word of the day.
 - Short message.
 - Number, color, and energy chips.
-- Astra branding light touch.
+- Nova branding light touch.
 - Watermark for free tier if enabled.
 - No excessive text.
 
