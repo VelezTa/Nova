@@ -37,7 +37,9 @@ Deliverables:
 Acceptance criteria:
 - App starts locally.
 - TypeScript check passes.
+- Phase 2 includes only setup work: Expo TypeScript scaffolding, linting, formatting, path aliases, base scripts, Expo Router, startup instructions, and secret-free environment templates.
 - No production features are implemented yet.
+- Do not implement auth, database logic, AI calls, payments, subscriptions, notifications, palm upload, or final production screens in Phase 2.
 
 ## Phase 3 - Design System And Navigation
 

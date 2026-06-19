@@ -258,9 +258,14 @@ Do not adopt:
 
 ## Open Questions
 
+### Deferred, Not Blocking Phase 2 Setup
+
 - Which analytics provider should be selected: PostHog, Amplitude, or Firebase Analytics?
 - Which astrology calculation approach should be used for birth chart depth: library, API, or hybrid?
 - Should Plus include one full palm reading per billing period or unlimited basic palm readings?
 - What final price points should be used for Plus, Pro, and one-time purchases?
 - What is the final brand name if Astra changes?
-- The reference image must still be reviewed and incorporated into `DESIGN-SYSTEM.md`.
+
+### Blocks Later Design Or Product Phases
+
+- The reference image must still be reviewed and incorporated into `DESIGN-SYSTEM.md` before final visual design implementation.

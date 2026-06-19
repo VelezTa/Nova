@@ -55,10 +55,11 @@ All generated content must be positive, reflective, non-deterministic, and emoti
 ## How To Use This Repo
 
 1. Review the documentation before implementation.
-2. Resolve open questions in `DECISION-LOG.md`, `TECHNICAL-RISKS.md`, and `RESEARCH-NOTES.md`.
-3. Approve Phase 1 documentation.
-4. Start Phase 2 by creating the Expo TypeScript project only after approval.
-5. Build one phase at a time using `PLAN.md` and verify using `QA-CHECKLIST.md`.
+2. Resolve any open question that directly affects the next implementation phase.
+3. Treat deferred product, pricing, analytics, branding, visual reference, and astrology-depth questions in `RESEARCH-NOTES.md` as non-blocking for Phase 2 setup unless they affect the app shell.
+4. Phase 1 documentation is approved for Phase 2 project setup.
+5. Start Phase 2 by creating the Expo TypeScript project only within the setup boundaries in `PLAN.md`.
+6. Build one phase at a time using `PLAN.md` and verify using `QA-CHECKLIST.md`.
 
 ## Important Notes
 
