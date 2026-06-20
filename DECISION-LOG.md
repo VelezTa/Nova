@@ -105,3 +105,13 @@
 - Status: Approved
 
 Phase 2 is limited to Expo TypeScript scaffolding, linting and formatting setup, Expo Router, base scripts, local startup instructions, and secret-free environment templates. It must not implement production auth, database logic, AI calls, payments, subscriptions, notifications, palm upload, or final production screens.
+
+## Decision 14
+
+- Date: 2026-06-19
+- Decision: Start Phase 3 with the visible placeholder brand name "Nova", a full static route map, and focused UI dependencies for gradients and icons.
+- Reason: The user approved Phase 3 design system and navigation work after Phase 2 setup. The screenshot reference requires gradients and consistent iconography, while the phase boundary still requires static placeholders only.
+- Alternatives considered: Use "Astra" in the visible placeholder UI, create only core routes, install NativeWind now, or avoid all new UI dependencies.
+- Status: Approved
+
+Phase 3 is limited to design tokens, reusable base UI components, Expo Router navigation skeleton, setup-only static screens, and documentation alignment. It must not implement authentication, Supabase database logic, AI calls, payments, subscriptions, RevenueCat integration, notifications, palm upload, camera, image picker, image analysis, backend logic, migrations, secrets, or final production screens.

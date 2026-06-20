@@ -2,7 +2,16 @@
 
 ## Reference Status
 
-The current visual baseline is derived from the written reference direction. The actual reference image is pending review and this file should be updated after the image is attached.
+The Phase 3 visual baseline has been reviewed against the attached UI reference screenshot. The screenshot should guide mood and foundation-level styling, not pixel-perfect copying.
+
+Phase 3 should translate the reference into:
+
+- Deep navy, black, and purple cosmic backgrounds.
+- Warm gold accents for premium emphasis.
+- Soft violet and pink glows used sparingly.
+- Rounded celestial cards with subtle borders.
+- Clear bottom tab navigation with only the main destinations.
+- Static setup-only placeholder screens until later feature phases are approved.
 
 ## Brand Personality
 
@@ -25,16 +34,25 @@ It should not feel dark in a scary way, cheap, fear-based, cluttered, generic, o
 ## Color Palette
 
 - Background: `#050511`
+- Background gradient start: `#050511`
+- Background gradient middle: `#120B2F`
+- Background gradient end: `#24104F`
 - Surface: `#101021`
 - Surface elevated: `#17172C`
 - Deep purple: `#2B165F`
 - Violet: `#7B4DFF`
+- Soft violet: `#A78BFA`
 - Soft pink: `#D86CFF`
 - Gold: `#F6C76A`
 - Warm gold: `#D99A3D`
 - Text primary: `#F8EFD2`
 - Text secondary: `#BEB6D8`
+- Text muted: `#81779F`
 - Success / positive: `#A7F3D0`
+- Border subtle: `rgba(246, 199, 106, 0.22)`
+- Card border: `rgba(255, 255, 255, 0.08)`
+- Glow purple: `rgba(123, 77, 255, 0.35)`
+- Glow gold: `rgba(246, 199, 106, 0.28)`
 
 Avoid red except for technical errors. Do not use aggressive danger styling for product guidance.
 
@@ -94,9 +112,21 @@ Avoid red except for technical errors. Do not use aggressive danger styling for 
 
 ## Navigation Style
 
-- Bottom tabs for Home, Chat, Readings, Compatibility, and My Space or a close equivalent.
+- Bottom tabs for Home, Daily, Chat, Palm, and Profile.
 - Home should show key shortcuts immediately.
+- Compatibility should be reachable from Home and Profile, not a required bottom tab.
 - Use full-screen feature flows for onboarding, palm upload, compatibility setup, and paywall.
+
+## Phase 3 Implementation Rules
+
+- Use React Native `StyleSheet` with shared theme tokens for Phase 3.
+- Use `expo-linear-gradient` for cosmic backgrounds and premium buttons.
+- Use `@expo/vector-icons` for consistent celestial and navigation icons.
+- Do not install NativeWind during Phase 3.
+- Do not add custom fonts yet; keep typography tokens ready for future font replacement.
+- Placeholder screens must clearly say they are setup-only.
+- Placeholder copy must stay positive, symbolic, short, and non-deterministic.
+- Paywall UI in Phase 3 is only a visual navigation target and must not imply active purchases.
 
 ## Empty States
 
