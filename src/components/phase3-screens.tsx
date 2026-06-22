@@ -7,7 +7,6 @@ import {
   CosmicScreen,
   EmptyStateCard,
   FeatureShortcutCard,
-  type IconName,
   InfoList,
   LoadingStateCard,
   PlaceholderNotice,
@@ -18,145 +17,40 @@ import {
   StaticField,
 } from '@/components';
 import { colors, spacing, typography } from '@/theme';
+import {
+  ReferenceBirthDateScreen,
+  ReferenceBirthPlaceScreen,
+  ReferenceBirthTimeScreen,
+  ReferenceInterestScreen,
+  ReferenceNameScreen,
+  ReferenceWelcomeScreen,
+} from './onboarding-reference';
 
 const dailyMessage =
   'Today invites you to slow down, listen closely, and choose what feels peaceful.';
 
 export function WelcomeScreen() {
-  return (
-    <CosmicScreen>
-      <ScreenHeader
-        align="center"
-        body="Your daily cosmic guide for clarity, energy, and self-discovery."
-        eyebrow="Welcome to Nova"
-        icon="moon-outline"
-        title="Meet Nova"
-      />
-      <CelestialCard icon="sparkles-outline" title="A softer daily ritual">
-        <Text style={styles.body}>
-          Nova uses symbolic, positive guidance to support reflection and calm.
-          Production onboarding starts in a later approved phase.
-        </Text>
-      </CelestialCard>
-      <SafeDisclaimerBlock />
-      <AppButton href="/name" icon="arrow-forward-outline" label="Begin" />
-      <AppButton href="/home" label="Open Phase 3 home" variant="ghost" />
-    </CosmicScreen>
-  );
-}
-
-type OnboardingStepProps = {
-  title: string;
-  body: string;
-  nextHref: string;
-  nextLabel?: string;
-  fields?: { label: string; value: string; icon?: IconName }[];
-  options?: string[];
-};
-
-function OnboardingStep({
-  title,
-  body,
-  nextHref,
-  nextLabel = 'Continue',
-  fields = [],
-  options = [],
-}: OnboardingStepProps) {
-  return (
-    <CosmicScreen>
-      <ScreenHeader body={body} icon="sparkles-outline" title={title} />
-      <PlaceholderNotice />
-      {fields.length > 0 ? (
-        <View style={styles.stack}>
-          {fields.map((field) => (
-            <StaticField key={field.label} {...field} />
-          ))}
-        </View>
-      ) : null}
-      {options.length > 0 ? (
-        <View style={styles.optionGrid}>
-          {options.map((option) => (
-            <Badge key={option} icon="ellipse-outline" tone="violet">
-              {option}
-            </Badge>
-          ))}
-        </View>
-      ) : null}
-      <AppButton href={nextHref} label={nextLabel} />
-    </CosmicScreen>
-  );
+  return <ReferenceWelcomeScreen />;
 }
 
 export function NameScreen() {
-  return (
-    <OnboardingStep
-      body="This screen will collect a preferred name later. For now it previews the visual style only."
-      fields={[{ label: 'Name', value: 'Erika', icon: 'person-outline' }]}
-      nextHref="/birth-date"
-      title="What should Nova call you?"
-    />
-  );
+  return <ReferenceNameScreen />;
 }
 
 export function BirthDateScreen() {
-  return (
-    <OnboardingStep
-      body="Birth details will support symbolic personalization after onboarding is approved."
-      fields={[
-        {
-          label: 'Date of birth',
-          value: 'May 21, 1994',
-          icon: 'calendar-outline',
-        },
-      ]}
-      nextHref="/birth-time"
-      title="When were you born?"
-    />
-  );
+  return <ReferenceBirthDateScreen />;
 }
 
 export function BirthTimeScreen() {
-  return (
-    <OnboardingStep
-      body="Nova will support exact, approximate, and unknown birth time paths in a later phase."
-      nextHref="/birth-place"
-      options={['Exact time', 'Approximate range', 'I do not know']}
-      title="Do you know your birth time?"
-    />
-  );
+  return <ReferenceBirthTimeScreen />;
 }
 
 export function BirthPlaceScreen() {
-  return (
-    <OnboardingStep
-      body="Location fields are static here and are not connected to storage or geocoding."
-      fields={[
-        { label: 'City', value: 'San Juan', icon: 'location-outline' },
-        { label: 'Country', value: 'Puerto Rico', icon: 'earth-outline' },
-      ]}
-      nextHref="/interest"
-      title="Where were you born?"
-    />
-  );
+  return <ReferenceBirthPlaceScreen />;
 }
 
 export function InterestScreen() {
-  return (
-    <OnboardingStep
-      body="These preview chips match the approved guidance themes without saving a selection."
-      nextHref="/cosmic-profile"
-      options={[
-        'Love',
-        'Career',
-        'Money',
-        'Self-growth',
-        'Emotional clarity',
-        'Compatibility',
-        'Daily guidance',
-      ]}
-      title="What do you want guidance on most?"
-    />
-  );
+  return <ReferenceInterestScreen />;
 }
 
 export function CosmicProfilePreviewScreen() {
