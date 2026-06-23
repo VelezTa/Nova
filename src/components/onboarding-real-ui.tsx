@@ -12,6 +12,17 @@ import {
   View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import Svg, {
+  Circle,
+  Defs,
+  G,
+  Line,
+  LinearGradient as SvgLinearGradient,
+  Path,
+  RadialGradient,
+  Rect,
+  Stop,
+} from 'react-native-svg';
 
 type IconName = ComponentProps<typeof Ionicons>['name'];
 type RouteTarget = string;
@@ -36,33 +47,41 @@ type Choice = {
 
 export const onboardingTokens = {
   screenPadding: 28,
-  topSafeAreaSpacing: 18,
-  labelSpacing: 9,
-  titleFontSize: 30,
+  topSafeAreaSpacing: 20,
+  labelSpacing: 8,
+  titleFontSize: 31,
   titleLineHeight: 35,
-  welcomeTitleFontSize: 44,
-  welcomeTitleLineHeight: 50,
-  subtitleFontSize: 15,
-  subtitleLineHeight: 21,
+  welcomeTitleFontSize: 35,
+  welcomeTitleLineHeight: 39,
+  subtitleFontSize: 13,
+  subtitleLineHeight: 19,
   cardWidth: '100%',
-  cardMinHeight: 86,
-  cardBorderRadius: 18,
+  cardMinHeight: 82,
+  cardBorderRadius: 16,
   cardBorderColor: 'rgba(255, 205, 108, 0.34)',
   cardBackgroundOpacity: 0.82,
   inputHeight: 86,
-  chipHeight: 42,
-  radioRowHeight: 52,
-  ctaHeight: 64,
-  ctaBottomSpacing: 12,
+  chipHeight: 38,
+  radioRowHeight: 48,
+  ctaHeight: 52,
+  ctaBottomSpacing: 9,
   goldTextColor: '#FFD36E',
   creamTextColor: '#FFF1C8',
   mutedTextColor: '#D3C6F5',
   purpleGlowColor: 'rgba(132, 68, 255, 0.5)',
-  backgroundGradientColors: ['#030412', '#08051C', '#140A32'] as [
+  backgroundGradientColors: ['#020513', '#07071C', '#120823'] as [
     string,
     string,
     string,
   ],
+} as const;
+
+const fonts = {
+  display: 'CormorantGaramond_700Bold',
+  body: 'NunitoSans_400Regular',
+  bodySemi: 'NunitoSans_600SemiBold',
+  bodyBold: 'NunitoSans_700Bold',
+  bodyExtraBold: 'NunitoSans_800ExtraBold',
 } as const;
 
 const colors = {
@@ -264,7 +283,7 @@ function OnboardingScreen({
 }: PropsWithChildren<{ variant: ScreenVariant }>) {
   const { height, width } = useWindowDimensions();
   const compact = height < 820;
-  const maxWidth = Math.min(width, 430);
+  const maxWidth = Math.min(width, 402);
 
   return (
     <View style={styles.screen}>
@@ -274,13 +293,14 @@ function OnboardingScreen({
         style={StyleSheet.absoluteFill}
       />
       <CosmicBackground variant={variant} />
-      <SafeAreaView style={styles.safeArea}>
+      <SafeAreaView edges={['top', 'left', 'right']} style={styles.safeArea}>
         <View
           style={[
             styles.content,
             compact && styles.compactContent,
             { maxWidth },
             variant === 'welcome' && styles.welcomeContent,
+            variant === 'interest' && styles.interestContent,
           ]}
         >
           {children}
@@ -307,7 +327,6 @@ function CosmicBackground({ variant }: { variant: ScreenVariant }) {
         style={[styles.horizonGlow, variant === 'welcome' && styles.hidden]}
       />
       <StarField dense={variant !== 'welcome'} />
-      {variant === 'welcome' ? <WelcomeMoon /> : null}
       {variant === 'name' || variant === 'birthPlace' ? (
         <CrescentPlanet />
       ) : null}
@@ -323,84 +342,137 @@ function CosmicBackground({ variant }: { variant: ScreenVariant }) {
 function StarField({ dense }: { dense: boolean }) {
   const stars = dense
     ? [
-        [36, 32, 4],
-        [72, 74, 2],
-        [126, 50, 3],
-        [182, 98, 4],
-        [258, 60, 3],
-        [330, 120, 4],
-        [344, 262, 2],
-        [44, 226, 2],
-        [210, 274, 3],
-        [120, 346, 2],
-        [292, 406, 3],
-        [58, 472, 2],
-        [218, 520, 3],
+        [34, 28, 2.4],
+        [70, 72, 1.5],
+        [124, 52, 2],
+        [188, 96, 2.4],
+        [252, 62, 1.8],
+        [338, 116, 2.3],
+        [342, 258, 1.5],
+        [42, 226, 1.4],
+        [210, 272, 1.8],
+        [118, 344, 1.4],
+        [292, 402, 1.8],
+        [56, 472, 1.4],
+        [218, 518, 1.8],
+        [365, 72, 2],
+        [148, 156, 1.3],
+        [318, 352, 1.5],
       ]
     : [
-        [58, 96, 2],
-        [132, 68, 2],
-        [246, 120, 3],
-        [320, 248, 2],
-        [90, 520, 2],
-        [286, 462, 2],
+        [56, 94, 1.6],
+        [132, 66, 1.5],
+        [246, 120, 2],
+        [320, 248, 1.5],
+        [90, 520, 1.5],
+        [286, 462, 1.5],
+        [348, 160, 2],
       ];
 
   return (
-    <View style={StyleSheet.absoluteFill}>
+    <Svg style={StyleSheet.absoluteFill} viewBox="0 0 402 874">
+      <Defs>
+        <RadialGradient id="starGlow" cx="50%" cy="50%" r="50%">
+          <Stop offset="0" stopColor="#FFE08A" stopOpacity="1" />
+          <Stop offset="1" stopColor="#F4A13F" stopOpacity="0.15" />
+        </RadialGradient>
+      </Defs>
       {stars.map(([left, top, size], index) => (
-        <View
+        <Circle
+          cx={left}
+          cy={top}
+          fill="url(#starGlow)"
           key={`${left}-${top}-${index}`}
-          style={[
-            styles.dotStar,
-            {
-              height: size,
-              left,
-              top,
-              width: size,
-            },
-          ]}
+          opacity={0.82}
+          r={size}
         />
       ))}
-      <Text style={[styles.starGlyph, styles.starGlyphOne]}>✦</Text>
-      <Text style={[styles.starGlyph, styles.starGlyphTwo]}>✧</Text>
-      <Text style={[styles.starGlyph, styles.starGlyphThree]}>✦</Text>
-      {dense ? (
-        <Text style={[styles.starGlyph, styles.starGlyphFour]}>✧</Text>
-      ) : null}
-    </View>
+      <SparklePath x={360} y={46} scale={1.05} />
+      <SparklePath x={42} y={112} scale={0.72} />
+      <SparklePath x={258} y={136} scale={0.58} />
+      {dense ? <SparklePath x={328} y={356} scale={0.5} /> : null}
+    </Svg>
   );
 }
 
-function WelcomeMoon() {
+function SparklePath({
+  x,
+  y,
+  scale = 1,
+}: {
+  x: number;
+  y: number;
+  scale?: number;
+}) {
   return (
-    <View style={styles.welcomeMoonRing}>
-      <Text style={styles.backgroundMoon}>☾</Text>
-    </View>
+    <G transform={`translate(${x} ${y}) scale(${scale})`}>
+      <Path
+        d="M0 -18 C3 -6 6 -3 18 0 C6 3 3 6 0 18 C-3 6 -6 3 -18 0 C-6 -3 -3 -6 0 -18Z"
+        fill="#FFD978"
+      />
+      <Path
+        d="M0 -12 C2 -4 4 -2 12 0 C4 2 2 4 0 12 C-2 4 -4 2 -12 0 C-4 -2 -2 -4 0 -12Z"
+        fill="#FFF0B4"
+        opacity={0.42}
+      />
+    </G>
   );
 }
 
 function CrescentPlanet() {
   return (
-    <View style={styles.crescentWrap}>
-      <LinearGradient
-        colors={['rgba(255, 202, 115, 0.9)', 'rgba(166, 56, 144, 0.78)']}
-        style={styles.crescentBody}
+    <Svg style={styles.crescentWrap} viewBox="0 0 88 88">
+      <Defs>
+        <SvgLinearGradient id="crescentFill" x1="0" x2="1" y1="0" y2="1">
+          <Stop offset="0" stopColor="#FFD078" />
+          <Stop offset="0.58" stopColor="#B44D9F" />
+          <Stop offset="1" stopColor="#46175F" />
+        </SvgLinearGradient>
+      </Defs>
+      <Circle cx="44" cy="44" fill="url(#crescentFill)" r="39" />
+      <Circle cx="58" cy="30" fill="#060619" r="39" />
+      <Path
+        d="M26 19 C19 31 20 48 29 61"
+        stroke="rgba(255, 217, 126, 0.42)"
+        strokeWidth="1"
       />
-      <View style={styles.crescentCut} />
-    </View>
+    </Svg>
   );
 }
 
 function RightPlanet() {
   return (
-    <View style={styles.planetWrap}>
-      <LinearGradient
-        colors={['rgba(255, 204, 112, 0.7)', 'rgba(123, 45, 202, 0.36)']}
-        style={styles.planet}
+    <Svg style={styles.planetWrap} viewBox="0 0 240 240">
+      <Defs>
+        <RadialGradient id="planetFill" cx="36%" cy="44%" r="58%">
+          <Stop offset="0" stopColor="#FFD778" stopOpacity="0.9" />
+          <Stop offset="0.36" stopColor="#B64991" stopOpacity="0.72" />
+          <Stop offset="1" stopColor="#321068" stopOpacity="0.38" />
+        </RadialGradient>
+      </Defs>
+      <Circle
+        cx="120"
+        cy="120"
+        fill="url(#planetFill)"
+        r="113"
+        stroke="rgba(255, 202, 114, 0.26)"
+        strokeWidth="1"
       />
-      <View style={styles.planetShade} />
-    </View>
+      <Path
+        d="M37 112 C70 88 112 78 165 88"
+        fill="none"
+        opacity="0.34"
+        stroke="#FFD677"
+        strokeWidth="1.2"
+      />
+      <Path
+        d="M30 144 C78 122 135 120 199 139"
+        fill="none"
+        opacity="0.2"
+        stroke="#FFD677"
+        strokeWidth="1"
+      />
+    </Svg>
   );
 }
 
@@ -408,76 +480,187 @@ function ZodiacWheel() {
   const ticks = Array.from({ length: 12 }, (_, index) => index * 30);
 
   return (
-    <View style={styles.zodiacWheel}>
-      <View style={styles.zodiacCircleOuter} />
-      <View style={styles.zodiacCircleInner} />
+    <Svg style={styles.zodiacWheel} viewBox="0 0 260 260">
+      <Circle
+        cx="130"
+        cy="130"
+        fill="none"
+        r="124"
+        stroke="rgba(255, 207, 111, 0.42)"
+        strokeWidth="1"
+      />
+      <Circle
+        cx="130"
+        cy="130"
+        fill="none"
+        r="96"
+        stroke="rgba(255, 207, 111, 0.26)"
+        strokeWidth="1"
+      />
       {ticks.map((rotation) => (
-        <View
+        <Line
           key={rotation}
-          style={[
-            styles.zodiacTick,
-            { transform: [{ rotate: `${rotation}deg` }] },
-          ]}
+          opacity={0.25}
+          stroke="#FFD36E"
+          strokeWidth="1"
+          transform={`rotate(${rotation} 130 130)`}
+          x1="130"
+          x2="130"
+          y1="8"
+          y2="34"
         />
       ))}
-      <Text style={[styles.zodiacMark, styles.zodiacMarkOne]}>Ⅲ</Text>
-      <Text style={[styles.zodiacMark, styles.zodiacMarkTwo]}>Ⅵ</Text>
-      <Text style={[styles.zodiacMark, styles.zodiacMarkThree]}>Ⅸ</Text>
-      <View style={styles.zodiacSun} />
-    </View>
+      <Line
+        opacity={0.36}
+        stroke="#FFD36E"
+        strokeWidth="1"
+        x1="130"
+        x2="130"
+        y1="12"
+        y2="248"
+      />
+      <Line
+        opacity={0.2}
+        stroke="#FFD36E"
+        strokeWidth="1"
+        x1="12"
+        x2="248"
+        y1="130"
+        y2="130"
+      />
+      <Circle cx="184" cy="132" fill="#FFD36E" opacity="0.9" r="10" />
+    </Svg>
   );
 }
 
 function Constellation() {
-  const dots = [
-    styles.constellationDot0,
-    styles.constellationDot1,
-    styles.constellationDot2,
-    styles.constellationDot3,
-    styles.constellationDot4,
-    styles.constellationDot5,
+  const points = [
+    [18, 22],
+    [66, 40],
+    [105, 68],
+    [82, 116],
+    [112, 156],
+    [68, 188],
   ];
 
   return (
-    <View style={styles.constellation}>
-      <View style={[styles.constellationLine, styles.constellationLineOne]} />
-      <View style={[styles.constellationLine, styles.constellationLineTwo]} />
-      <View style={[styles.constellationLine, styles.constellationLineThree]} />
-      {dots.map((dotStyle, index) => (
-        <View key={index} style={[styles.constellationDot, dotStyle]} />
+    <Svg style={styles.constellation} viewBox="0 0 150 210">
+      <Path
+        d="M18 22 L66 40 L105 68 L82 116 L112 156 L68 188"
+        fill="none"
+        opacity="0.46"
+        stroke="#FFD36E"
+        strokeWidth="1"
+      />
+      {points.map(([cx, cy], index) => (
+        <Circle
+          cx={cx}
+          cy={cy}
+          fill="#FFD36E"
+          key={`${cx}-${cy}`}
+          r={index === 0 || index === 2 ? 2.5 : 2}
+        />
       ))}
-    </View>
+      <SparklePath x={118} y={28} scale={0.34} />
+    </Svg>
   );
 }
 
 function Landscape() {
   return (
-    <View style={styles.landscape}>
-      <View style={[styles.mountain, styles.mountainLeft]} />
-      <View style={[styles.mountain, styles.mountainRight]} />
-      <View style={styles.sunset} />
-      <View style={styles.waterLine} />
-      <View style={[styles.waterLine, styles.waterLineTwo]} />
-    </View>
+    <Svg style={styles.landscape} viewBox="0 0 402 250">
+      <Defs>
+        <RadialGradient id="sunsetGlow" cx="50%" cy="52%" r="50%">
+          <Stop offset="0" stopColor="#FFD471" stopOpacity="0.92" />
+          <Stop offset="0.36" stopColor="#D54EA9" stopOpacity="0.42" />
+          <Stop offset="1" stopColor="#120823" stopOpacity="0" />
+        </RadialGradient>
+        <SvgLinearGradient id="river" x1="0" x2="0" y1="0" y2="1">
+          <Stop offset="0" stopColor="#FFD777" stopOpacity="0.78" />
+          <Stop offset="0.56" stopColor="#B94AD1" stopOpacity="0.32" />
+          <Stop offset="1" stopColor="#050617" stopOpacity="0.2" />
+        </SvgLinearGradient>
+      </Defs>
+      <Rect fill="rgba(50, 18, 70, 0.36)" height="116" y="42" width="402" />
+      <Path
+        d="M0 74 C44 44 86 60 128 86 C176 116 238 98 294 64 C336 38 372 46 402 70 L402 250 L0 250Z"
+        fill="rgba(74, 22, 79, 0.52)"
+      />
+      <Circle cx="202" cy="96" fill="url(#sunsetGlow)" r="92" />
+      <Circle cx="202" cy="96" fill="#FFD36E" opacity="0.72" r="17" />
+      <Path d="M0 112 C42 86 83 114 119 137 L0 250Z" fill="#080719" />
+      <Path d="M402 106 C360 87 324 118 282 154 L402 250Z" fill="#09081C" />
+      <Path
+        d="M122 250 C158 204 176 172 202 111 C224 164 238 207 274 250Z"
+        fill="#0B0820"
+      />
+      <Path
+        d="M203 116 C191 143 218 158 204 181 C190 205 205 223 198 250"
+        fill="none"
+        stroke="url(#river)"
+        strokeLinecap="round"
+        strokeWidth="13"
+      />
+      <Path
+        d="M152 143 C190 137 226 137 266 143"
+        fill="none"
+        opacity="0.42"
+        stroke="#FFD36E"
+        strokeLinecap="round"
+        strokeWidth="1.5"
+      />
+      <Path
+        d="M130 172 C176 165 232 166 278 172"
+        fill="none"
+        opacity="0.28"
+        stroke="#FFD36E"
+        strokeLinecap="round"
+        strokeWidth="1.5"
+      />
+    </Svg>
   );
 }
 
 function Island() {
   return (
-    <View style={styles.island}>
-      <View style={styles.islandHill} />
-      <View style={styles.palmTrunk} />
-      <View style={[styles.palmLeaf, styles.palmLeafOne]} />
-      <View style={[styles.palmLeaf, styles.palmLeafTwo]} />
-      <View style={[styles.palmLeaf, styles.palmLeafThree]} />
-    </View>
+    <Svg style={styles.island} viewBox="0 0 84 76">
+      <Path d="M0 70 C22 48 64 48 84 70Z" fill="#070819" />
+      <Path
+        d="M42 64 C39 42 39 24 45 8"
+        fill="none"
+        stroke="#050513"
+        strokeLinecap="round"
+        strokeWidth="6"
+      />
+      <Path
+        d="M45 10 C28 8 18 17 12 30"
+        fill="none"
+        stroke="#050513"
+        strokeLinecap="round"
+        strokeWidth="6"
+      />
+      <Path
+        d="M46 10 C62 10 72 18 78 31"
+        fill="none"
+        stroke="#050513"
+        strokeLinecap="round"
+        strokeWidth="6"
+      />
+      <Path
+        d="M46 10 C40 22 36 31 30 40"
+        fill="none"
+        stroke="#050513"
+        strokeLinecap="round"
+        strokeWidth="6"
+      />
+    </Svg>
   );
 }
 
 function SparkleBadge() {
   return (
     <View style={styles.sparkleBadge}>
-      <Ionicons name="sparkles-outline" color={colors.gold} size={35} />
+      <SparkleIcon size={38} />
     </View>
   );
 }
@@ -485,8 +668,45 @@ function SparkleBadge() {
 function MoonBadge() {
   return (
     <View style={styles.moonBadge}>
-      <Text style={styles.badgeMoon}>☾</Text>
+      <Svg height="54" viewBox="0 0 64 64" width="54">
+        <Path
+          d="M43 10 C25 14 15 28 18 43 C21 57 38 61 51 51 C38 51 29 43 28 32 C27 22 32 14 43 10Z"
+          fill="#FFD878"
+        />
+      </Svg>
     </View>
+  );
+}
+
+function SparkleIcon({ size }: { size: number }) {
+  return (
+    <Svg height={size} viewBox="0 0 52 52" width={size}>
+      <Path
+        d="M25 2 C28 16 34 22 50 25 C34 28 28 34 25 50 C22 34 16 28 2 25 C16 22 22 16 25 2Z"
+        fill="none"
+        stroke="#FFD36E"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="3"
+      />
+      <Path
+        d="M9 4 C10 10 13 13 19 14 C13 15 10 18 9 24 C8 18 5 15 -1 14 C5 13 8 10 9 4Z"
+        fill="none"
+        stroke="#FFD36E"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="2.4"
+        transform="translate(4 8)"
+      />
+      <Path
+        d="M38 7 C39 13 42 16 48 17 C42 18 39 21 38 27 C37 21 34 18 28 17 C34 16 37 13 38 7Z"
+        fill="none"
+        stroke="#FFD36E"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="2.4"
+      />
+    </Svg>
   );
 }
 
@@ -509,10 +729,12 @@ function InputCard({ icon, label, value }: Field) {
       </View>
       <TextInput
         accessibilityLabel={label}
-        editable={false}
-        pointerEvents="none"
+        cursorColor={colors.gold}
+        defaultValue={value}
+        placeholder={label}
+        placeholderTextColor="rgba(229, 218, 255, 0.6)"
+        selectionColor="rgba(255, 211, 110, 0.35)"
         style={styles.textInput}
-        value={value}
       />
     </View>
   );
@@ -557,7 +779,11 @@ function InfoCard({
     >
       <View style={styles.infoTitleRow}>
         <Text style={styles.infoTitle}>{title}</Text>
-        <Ionicons name={icon} color={colors.gold} size={38} />
+        {icon === 'sparkles-outline' ? (
+          <SparkleIcon size={36} />
+        ) : (
+          <Ionicons name={icon} color={colors.gold} size={34} />
+        )}
       </View>
       <Text style={styles.infoBody}>{children}</Text>
     </LinearGradient>
@@ -636,19 +862,23 @@ const styles = StyleSheet.create({
   content: {
     alignSelf: 'center',
     flex: 1,
-    gap: 19,
+    gap: 16,
     paddingBottom: onboardingTokens.ctaBottomSpacing,
     paddingHorizontal: onboardingTokens.screenPadding,
     paddingTop: onboardingTokens.topSafeAreaSpacing,
     width: '100%',
   },
   compactContent: {
-    gap: 15,
-    paddingTop: 12,
+    gap: 12,
+    paddingTop: 5,
   },
   welcomeContent: {
-    gap: 15,
-    paddingTop: 34,
+    gap: 12,
+    paddingHorizontal: 20,
+    paddingTop: 8,
+  },
+  interestContent: {
+    gap: 14,
   },
   backgroundLayer: {
     ...StyleSheet.absoluteFill,
@@ -660,31 +890,31 @@ const styles = StyleSheet.create({
   },
   topGlow: {
     backgroundColor: onboardingTokens.purpleGlowColor,
-    height: 260,
-    opacity: 0.42,
-    right: -118,
-    top: 112,
-    width: 260,
+    height: 218,
+    opacity: 0.34,
+    right: -110,
+    top: 142,
+    width: 218,
   },
   subtleGlow: {
-    opacity: 0.08,
+    opacity: 0.23,
   },
   bottomGlow: {
     backgroundColor: 'rgba(213, 74, 171, 0.34)',
-    bottom: 82,
-    height: 190,
-    left: -120,
-    width: 190,
+    bottom: 96,
+    height: 176,
+    left: -108,
+    width: 176,
   },
   horizonGlow: {
     backgroundColor: 'rgba(251, 169, 74, 0.46)',
     borderRadius: 999,
-    bottom: 122,
-    height: 88,
-    left: '28%',
-    opacity: 0.7,
+    bottom: 116,
+    height: 76,
+    left: '33%',
+    opacity: 0.62,
     position: 'absolute',
-    width: 160,
+    width: 138,
   },
   hidden: {
     opacity: 0,
@@ -740,12 +970,12 @@ const styles = StyleSheet.create({
     transform: [{ rotate: '-14deg' }],
   },
   crescentWrap: {
-    height: 82,
+    height: 88,
     position: 'absolute',
-    right: 36,
-    top: 80,
+    right: 28,
+    top: 64,
     transform: [{ rotate: '-21deg' }],
-    width: 82,
+    width: 88,
   },
   crescentBody: {
     borderRadius: 999,
@@ -762,14 +992,10 @@ const styles = StyleSheet.create({
     width: 76,
   },
   planetWrap: {
-    borderColor: 'rgba(255, 199, 110, 0.28)',
-    borderRadius: 118,
-    borderWidth: 1,
     height: 236,
-    overflow: 'hidden',
     position: 'absolute',
-    right: -84,
-    top: 120,
+    right: -78,
+    top: 116,
     width: 236,
   },
   planet: {
@@ -787,13 +1013,11 @@ const styles = StyleSheet.create({
     width: 190,
   },
   zodiacWheel: {
-    alignItems: 'center',
-    height: 250,
-    justifyContent: 'center',
+    height: 260,
     position: 'absolute',
-    right: -76,
-    top: 190,
-    width: 250,
+    right: -78,
+    top: 180,
+    width: 260,
   },
   zodiacCircleOuter: {
     borderColor: 'rgba(255, 200, 105, 0.42)',
@@ -848,9 +1072,9 @@ const styles = StyleSheet.create({
   constellation: {
     height: 210,
     position: 'absolute',
-    right: 36,
-    top: 80,
-    width: 148,
+    right: 30,
+    top: 70,
+    width: 150,
   },
   constellationLine: {
     backgroundColor: 'rgba(255, 212, 112, 0.35)',
@@ -907,8 +1131,8 @@ const styles = StyleSheet.create({
     top: 188,
   },
   landscape: {
-    bottom: 92,
-    height: 170,
+    bottom: 62,
+    height: 198,
     left: 0,
     position: 'absolute',
     right: 0,
@@ -959,11 +1183,11 @@ const styles = StyleSheet.create({
     width: 160,
   },
   island: {
-    bottom: 172,
-    height: 70,
+    bottom: 178,
+    height: 76,
     position: 'absolute',
-    right: 18,
-    width: 72,
+    right: 14,
+    width: 84,
   },
   islandHill: {
     backgroundColor: 'rgba(7, 8, 24, 0.92)',
@@ -1008,7 +1232,7 @@ const styles = StyleSheet.create({
   },
   welcomeHeader: {
     alignItems: 'center',
-    gap: 11,
+    gap: 7,
     paddingHorizontal: 4,
     zIndex: 1,
   },
@@ -1018,19 +1242,19 @@ const styles = StyleSheet.create({
     borderColor: colors.goldBorder,
     borderRadius: 999,
     borderWidth: 1.2,
-    height: 64,
+    height: 56,
     justifyContent: 'center',
-    width: 64,
+    width: 56,
   },
   moonBadge: {
     alignItems: 'center',
     backgroundColor: 'rgba(26, 22, 39, 0.78)',
     borderColor: 'rgba(255, 211, 110, 0.43)',
     borderRadius: 999,
-    borderWidth: 2,
-    height: 86,
+    borderWidth: 1.4,
+    height: 80,
     justifyContent: 'center',
-    width: 86,
+    width: 80,
   },
   badgeMoon: {
     color: '#FFD676',
@@ -1041,45 +1265,44 @@ const styles = StyleSheet.create({
   },
   eyebrow: {
     color: colors.gold,
-    fontSize: 14,
-    fontWeight: '800',
+    fontFamily: fonts.bodyExtraBold,
+    fontSize: 13,
     letterSpacing: 0,
-    lineHeight: 19,
+    lineHeight: 18,
+    textTransform: 'uppercase',
   },
   title: {
     ...titleShadow,
     color: colors.cream,
-    fontFamily: 'Georgia',
+    fontFamily: fonts.display,
     fontSize: onboardingTokens.titleFontSize,
-    fontWeight: '700',
     letterSpacing: 0,
     lineHeight: onboardingTokens.titleLineHeight,
-    maxWidth: 300,
+    maxWidth: 210,
   },
   welcomeTitle: {
     ...titleShadow,
     color: colors.cream,
-    fontFamily: 'Georgia',
-    fontSize: 40,
-    fontWeight: '700',
+    fontFamily: fonts.display,
+    fontSize: onboardingTokens.welcomeTitleFontSize,
     letterSpacing: 0,
-    lineHeight: 46,
+    lineHeight: onboardingTokens.welcomeTitleLineHeight,
   },
   body: {
     color: '#F1E8FF',
+    fontFamily: fonts.body,
     fontSize: onboardingTokens.subtitleFontSize,
-    fontWeight: '400',
     letterSpacing: 0,
     lineHeight: onboardingTokens.subtitleLineHeight,
-    maxWidth: 280,
+    maxWidth: 240,
   },
   welcomeBody: {
     color: colors.muted,
-    fontSize: 17,
-    fontWeight: '600',
+    fontFamily: fonts.bodySemi,
+    fontSize: 13,
     letterSpacing: 0,
-    lineHeight: 25,
-    maxWidth: 310,
+    lineHeight: 18,
+    maxWidth: 212,
   },
   centerText: {
     textAlign: 'center',
@@ -1092,9 +1315,9 @@ const styles = StyleSheet.create({
     borderRadius: 999,
     borderWidth: 1.2,
     flexDirection: 'row',
-    gap: 10,
-    minHeight: 44,
-    paddingHorizontal: 14,
+    gap: 9,
+    minHeight: 38,
+    paddingHorizontal: 13,
     width: '100%',
     zIndex: 1,
   },
@@ -1104,10 +1327,10 @@ const styles = StyleSheet.create({
   noticeText: {
     color: colors.cream,
     flex: 1,
-    fontSize: 13,
-    fontWeight: '800',
+    fontFamily: fonts.bodyExtraBold,
+    fontSize: 12,
     letterSpacing: 0,
-    lineHeight: 17,
+    lineHeight: 15,
   },
   noticeDot: {
     backgroundColor: colors.gold,
@@ -1116,7 +1339,7 @@ const styles = StyleSheet.create({
     width: 4,
   },
   fieldStack: {
-    gap: 10,
+    gap: 9,
     zIndex: 1,
   },
   inputCard: {
@@ -1125,7 +1348,7 @@ const styles = StyleSheet.create({
     borderRadius: onboardingTokens.cardBorderRadius,
     borderWidth: 1,
     minHeight: onboardingTokens.inputHeight,
-    paddingHorizontal: 16,
+    paddingHorizontal: 15,
     paddingVertical: 14,
     width: onboardingTokens.cardWidth,
   },
@@ -1136,21 +1359,22 @@ const styles = StyleSheet.create({
   },
   inputLabel: {
     color: 'rgba(229, 218, 255, 0.76)',
-    fontSize: 14,
+    fontFamily: fonts.body,
+    fontSize: 13,
     letterSpacing: 0,
     lineHeight: 18,
   },
   textInput: {
     color: colors.cream,
-    fontSize: 19,
-    fontWeight: '700',
+    fontFamily: fonts.bodyBold,
+    fontSize: 18,
     letterSpacing: 0,
     lineHeight: 26,
-    marginTop: 9,
+    marginTop: 7,
     padding: 0,
   },
   radioStack: {
-    gap: 9,
+    gap: 8,
     zIndex: 1,
   },
   radioRow: {
@@ -1160,21 +1384,21 @@ const styles = StyleSheet.create({
     borderRadius: 999,
     borderWidth: 1,
     flexDirection: 'row',
-    gap: 12,
+    gap: 11,
     height: onboardingTokens.radioRowHeight,
     paddingHorizontal: 15,
   },
   radioText: {
     color: '#F0DFFF',
-    fontSize: 15,
-    fontWeight: '600',
+    fontFamily: fonts.bodySemi,
+    fontSize: 14,
     letterSpacing: 0,
     lineHeight: 21,
   },
   chipGrid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: 9,
+    gap: 8,
     zIndex: 1,
   },
   chip: {
@@ -1184,9 +1408,9 @@ const styles = StyleSheet.create({
     borderRadius: 13,
     borderWidth: 1,
     flexDirection: 'row',
-    gap: 8,
+    gap: 7,
     height: onboardingTokens.chipHeight,
-    paddingHorizontal: 12,
+    paddingHorizontal: 11,
     width: '48.5%',
   },
   wideChip: {
@@ -1195,21 +1419,22 @@ const styles = StyleSheet.create({
   chipText: {
     color: '#F0DFFF',
     flexShrink: 1,
-    fontSize: 13,
-    fontWeight: '700',
+    fontFamily: fonts.bodyBold,
+    fontSize: 12,
     letterSpacing: 0,
     lineHeight: 16,
   },
   welcomeCards: {
-    gap: 14,
+    gap: 10,
     zIndex: 1,
   },
   infoCard: {
     borderColor: colors.purpleBorder,
-    borderRadius: 24,
+    borderRadius: 18,
     borderWidth: 1.3,
-    minHeight: 148,
-    padding: 18,
+    minHeight: 174,
+    paddingHorizontal: 14,
+    paddingVertical: 15,
   },
   infoTitleRow: {
     alignItems: 'flex-start',
@@ -1219,41 +1444,40 @@ const styles = StyleSheet.create({
   infoTitle: {
     color: colors.cream,
     flex: 1,
-    fontFamily: 'Georgia',
-    fontSize: 23,
-    fontWeight: '700',
+    fontFamily: fonts.display,
+    fontSize: 21,
     letterSpacing: 0,
-    lineHeight: 29,
+    lineHeight: 25,
   },
   infoBody: {
     color: '#E7DDFC',
-    fontSize: 16,
-    fontWeight: '500',
+    fontFamily: fonts.bodySemi,
+    fontSize: 13,
     letterSpacing: 0,
-    lineHeight: 23,
-    marginTop: 14,
+    lineHeight: 18,
+    marginTop: 12,
   },
   safetyCard: {
     alignItems: 'flex-start',
     backgroundColor: 'rgba(20, 24, 46, 0.86)',
     borderColor: 'rgba(137, 213, 200, 0.34)',
-    borderRadius: 22,
+    borderRadius: 16,
     borderWidth: 1.1,
     flexDirection: 'row',
-    gap: 17,
-    minHeight: 116,
-    padding: 17,
+    gap: 12,
+    minHeight: 118,
+    padding: 14,
   },
   safetyText: {
     color: '#E0D8FA',
     flex: 1,
-    fontSize: 15,
-    fontWeight: '700',
+    fontFamily: fonts.bodyBold,
+    fontSize: 12,
     letterSpacing: 0,
-    lineHeight: 22,
+    lineHeight: 17,
   },
   bottomActions: {
-    gap: 15,
+    gap: 10,
     marginTop: 'auto',
     zIndex: 1,
   },
@@ -1271,17 +1495,17 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     color: '#15091D',
-    fontSize: 17,
-    fontWeight: '900',
+    fontFamily: fonts.bodyExtraBold,
+    fontSize: 16,
     letterSpacing: 0,
     lineHeight: 22,
   },
   textLink: {
     color: '#D7B7FF',
-    fontSize: 18,
-    fontWeight: '800',
+    fontFamily: fonts.bodyExtraBold,
+    fontSize: 16,
     letterSpacing: 0,
-    lineHeight: 24,
+    lineHeight: 22,
     textAlign: 'center',
   },
 });
