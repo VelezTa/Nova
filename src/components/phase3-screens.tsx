@@ -6,7 +6,6 @@ import {
   RealBirthTimeScreen,
   RealInterestScreen,
   RealNameScreen,
-  RealWelcomeScreen,
 } from './onboarding-real-ui';
 
 import {
@@ -29,10 +28,6 @@ import { colors, spacing, typography } from '@/theme';
 
 const dailyMessage =
   'Today invites you to slow down, listen closely, and choose what feels peaceful.';
-
-export function WelcomeScreen() {
-  return <RealWelcomeScreen />;
-}
 
 export function NameScreen() {
   return <RealNameScreen />;
