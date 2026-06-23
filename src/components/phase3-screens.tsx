@@ -1,6 +1,15 @@
 import { StyleSheet, Text, View } from 'react-native';
 
 import {
+  RealBirthDateScreen,
+  RealBirthPlaceScreen,
+  RealBirthTimeScreen,
+  RealInterestScreen,
+  RealNameScreen,
+  RealWelcomeScreen,
+} from './onboarding-real-ui';
+
+import {
   AppButton,
   Badge,
   CelestialCard,
@@ -17,40 +26,32 @@ import {
   StaticField,
 } from '@/components';
 import { colors, spacing, typography } from '@/theme';
-import {
-  ReferenceBirthDateScreen,
-  ReferenceBirthPlaceScreen,
-  ReferenceBirthTimeScreen,
-  ReferenceInterestScreen,
-  ReferenceNameScreen,
-  ReferenceWelcomeScreen,
-} from './onboarding-reference';
 
 const dailyMessage =
   'Today invites you to slow down, listen closely, and choose what feels peaceful.';
 
 export function WelcomeScreen() {
-  return <ReferenceWelcomeScreen />;
+  return <RealWelcomeScreen />;
 }
 
 export function NameScreen() {
-  return <ReferenceNameScreen />;
+  return <RealNameScreen />;
 }
 
 export function BirthDateScreen() {
-  return <ReferenceBirthDateScreen />;
+  return <RealBirthDateScreen />;
 }
 
 export function BirthTimeScreen() {
-  return <ReferenceBirthTimeScreen />;
+  return <RealBirthTimeScreen />;
 }
 
 export function BirthPlaceScreen() {
-  return <ReferenceBirthPlaceScreen />;
+  return <RealBirthPlaceScreen />;
 }
 
 export function InterestScreen() {
-  return <ReferenceInterestScreen />;
+  return <RealInterestScreen />;
 }
 
 export function CosmicProfilePreviewScreen() {
