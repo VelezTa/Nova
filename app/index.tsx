@@ -1,5 +1,3 @@
-import { Redirect } from 'expo-router';
+import { ReferenceIntroWelcomeScreen } from '@/components/reference-intro-onboarding';
 
-export default function Index() {
-  return <Redirect href={'/name' as never} />;
-}
+export default ReferenceIntroWelcomeScreen;
