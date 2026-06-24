@@ -2,27 +2,54 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { Image, StyleSheet, View } from 'react-native';
 import Svg, { Defs, RadialGradient, Rect, Stop } from 'react-native-svg';
 
-import cosmicBackground from '../../assets/images/cosmic-onboarding-background.png';
+import birthDateBackground from '../../assets/images/onboarding-background-birth-date.png';
+import birthPlaceBackground from '../../assets/images/onboarding-background-birth-place.png';
+import birthTimeBackground from '../../assets/images/onboarding-background-birth-time.png';
+import interestBackground from '../../assets/images/onboarding-background-interest.png';
+import nameBackground from '../../assets/images/onboarding-background-name.png';
 
-export function CosmicOnboardingBackground() {
+export type CosmicOnboardingBackgroundVariant =
+  | 'name'
+  | 'birthDate'
+  | 'birthTime'
+  | 'birthPlace'
+  | 'interest';
+
+type CosmicOnboardingBackgroundProps = {
+  variant?: CosmicOnboardingBackgroundVariant;
+};
+
+const backgroundImages = {
+  name: nameBackground,
+  birthDate: birthDateBackground,
+  birthTime: birthTimeBackground,
+  birthPlace: birthPlaceBackground,
+  interest: interestBackground,
+} as const;
+
+export function CosmicOnboardingBackground({
+  variant = 'name',
+}: CosmicOnboardingBackgroundProps) {
+  const variantStyle = variantStyles[variant];
+
   return (
     <View pointerEvents="none" style={styles.backgroundLayer}>
       <Image
         resizeMode="cover"
-        source={cosmicBackground}
+        source={backgroundImages[variant]}
         style={styles.backgroundImage}
       />
       <LinearGradient
         colors={[
-          'rgba(0, 2, 13, 0.26)',
-          'rgba(2, 3, 17, 0.1)',
-          'rgba(7, 2, 18, 0.18)',
-          'rgba(0, 0, 8, 0.42)',
+          'rgba(0, 2, 13, 0.08)',
+          'rgba(2, 3, 17, 0.04)',
+          'rgba(7, 2, 18, 0.08)',
+          'rgba(0, 0, 8, 0.24)',
         ]}
         locations={[0, 0.34, 0.68, 1]}
         style={StyleSheet.absoluteFill}
       />
-      <View style={styles.readabilityScrim} />
+      <View style={[styles.readabilityScrim, variantStyle.scrim]} />
       <VignetteLayer />
     </View>
   );
@@ -65,6 +92,26 @@ const styles = StyleSheet.create({
     right: 0,
     top: 0,
   },
+  birthDateScrim: {
+    backgroundColor: 'rgba(2, 3, 16, 0.08)',
+    bottom: '42%',
+  },
+  birthPlaceScrim: {
+    backgroundColor: 'rgba(2, 3, 16, 0.06)',
+    bottom: '58%',
+  },
+  birthTimeScrim: {
+    backgroundColor: 'rgba(2, 3, 16, 0.1)',
+    bottom: '34%',
+  },
+  interestScrim: {
+    backgroundColor: 'rgba(2, 3, 16, 0.08)',
+    bottom: '31%',
+  },
+  nameScrim: {
+    backgroundColor: 'rgba(2, 3, 16, 0.08)',
+    bottom: '39%',
+  },
   readabilityScrim: {
     backgroundColor: 'rgba(2, 3, 16, 0.18)',
     bottom: '39%',
@@ -74,3 +121,21 @@ const styles = StyleSheet.create({
     top: 0,
   },
 });
+
+const variantStyles = {
+  name: {
+    scrim: styles.nameScrim,
+  },
+  birthDate: {
+    scrim: styles.birthDateScrim,
+  },
+  birthTime: {
+    scrim: styles.birthTimeScrim,
+  },
+  birthPlace: {
+    scrim: styles.birthPlaceScrim,
+  },
+  interest: {
+    scrim: styles.interestScrim,
+  },
+} as const;

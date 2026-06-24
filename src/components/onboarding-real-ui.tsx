@@ -3,6 +3,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import type { ComponentProps, PropsWithChildren } from 'react';
+import { useState } from 'react';
 import {
   Pressable,
   StyleSheet,
@@ -14,16 +15,14 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Svg, { Path } from 'react-native-svg';
 
-import { CosmicOnboardingBackground } from './cosmic-onboarding-background';
+import {
+  CosmicOnboardingBackground,
+  type CosmicOnboardingBackgroundVariant,
+} from './cosmic-onboarding-background';
 
 type IconName = ComponentProps<typeof Ionicons>['name'];
 type RouteTarget = string;
-type ScreenVariant =
-  | 'name'
-  | 'birthDate'
-  | 'birthTime'
-  | 'birthPlace'
-  | 'interest';
+type ScreenVariant = CosmicOnboardingBackgroundVariant;
 
 type Field = {
   icon: IconName;
@@ -188,6 +187,27 @@ function SetupScreen({
   radioOptions = [],
   chips = [],
 }: SetupScreenProps) {
+  const [selectedRadio, setSelectedRadio] = useState<string | null>(
+    radioOptions[0]?.label ?? null,
+  );
+  const [selectedChips, setSelectedChips] = useState<ReadonlySet<string>>(
+    () => new Set(),
+  );
+
+  function toggleChip(label: string) {
+    setSelectedChips((current) => {
+      const next = new Set(current);
+
+      if (next.has(label)) {
+        next.delete(label);
+      } else {
+        next.add(label);
+      }
+
+      return next;
+    });
+  }
+
   return (
     <OnboardingScreen variant={variant}>
       <View style={styles.setupHeader}>
@@ -212,7 +232,12 @@ function SetupScreen({
       {radioOptions.length > 0 ? (
         <View style={styles.radioStack}>
           {radioOptions.map((option) => (
-            <RadioRow key={option.label} {...option} />
+            <RadioRow
+              key={option.label}
+              {...option}
+              onPress={() => setSelectedRadio(option.label)}
+              selected={selectedRadio === option.label}
+            />
           ))}
         </View>
       ) : null}
@@ -220,7 +245,12 @@ function SetupScreen({
       {chips.length > 0 ? (
         <View style={styles.chipGrid}>
           {chips.map((chip) => (
-            <InterestChip key={chip.label} {...chip} />
+            <InterestChip
+              key={chip.label}
+              {...chip}
+              onPress={() => toggleChip(chip.label)}
+              selected={selectedChips.has(chip.label)}
+            />
           ))}
         </View>
       ) : null}
@@ -247,7 +277,7 @@ function OnboardingScreen({
         colors={onboardingTokens.backgroundGradientColors}
         style={StyleSheet.absoluteFill}
       />
-      <CosmicOnboardingBackground />
+      <CosmicOnboardingBackground variant={variant} />
       <SafeAreaView edges={['top', 'left', 'right']} style={styles.safeArea}>
         <View
           style={[
@@ -334,29 +364,69 @@ function InputCard({ icon, label, value }: Field) {
   );
 }
 
-function RadioRow({ icon, label }: Choice) {
+function RadioRow({
+  icon,
+  label,
+  onPress,
+  selected,
+}: Choice & { onPress: () => void; selected: boolean }) {
   return (
-    <Pressable accessibilityRole="radio" style={styles.radioRow}>
-      <Ionicons name={icon} color="#DFA5FF" size={24} />
-      <Text style={styles.radioText}>{label}</Text>
+    <Pressable
+      accessibilityRole="radio"
+      accessibilityState={{ checked: selected }}
+      hitSlop={6}
+      onPress={onPress}
+      style={({ pressed }) => [
+        styles.radioRow,
+        selected && styles.selectedRadioRow,
+        pressed && styles.pressedControl,
+      ]}
+    >
+      <Ionicons
+        name={selected ? 'radio-button-on-outline' : icon}
+        color={selected ? colors.gold : '#DFA5FF'}
+        size={24}
+      />
+      <Text style={[styles.radioText, selected && styles.selectedControlText]}>
+        {label}
+      </Text>
+      {selected ? <View style={styles.selectedDot} /> : null}
     </Pressable>
   );
 }
 
-function InterestChip({ icon, label }: Choice) {
+function InterestChip({
+  icon,
+  label,
+  onPress,
+  selected,
+}: Choice & { onPress: () => void; selected: boolean }) {
   const wide = label === 'Daily guidance';
 
   return (
     <Pressable
-      accessibilityRole="button"
-      style={[styles.chip, wide && styles.wideChip]}
+      accessibilityRole="checkbox"
+      accessibilityState={{ checked: selected }}
+      hitSlop={6}
+      onPress={onPress}
+      style={({ pressed }) => [
+        styles.chip,
+        wide && styles.wideChip,
+        selected && styles.selectedChip,
+        pressed && styles.pressedControl,
+      ]}
     >
       <Ionicons
         name={icon}
-        color={wide ? colors.gold : colors.rose}
+        color={selected || wide ? colors.gold : colors.rose}
         size={18}
       />
-      <Text style={styles.chipText}>{label}</Text>
+      <Text style={[styles.chipText, selected && styles.selectedControlText]}>
+        {label}
+      </Text>
+      {selected ? (
+        <Ionicons name="checkmark-circle" color={colors.gold} size={15} />
+      ) : null}
     </Pressable>
   );
 }
@@ -376,7 +446,10 @@ function GradientButton({
     <Pressable
       accessibilityRole="button"
       onPress={() => router.push(href as never)}
-      style={styles.buttonPressable}
+      style={({ pressed }) => [
+        styles.buttonPressable,
+        pressed && styles.pressedButton,
+      ]}
     >
       <LinearGradient
         colors={['#FFD06F', '#EA78D6', '#8B45FF']}
@@ -541,6 +614,14 @@ const styles = StyleSheet.create({
     height: onboardingTokens.radioRowHeight,
     paddingHorizontal: 15,
   },
+  selectedRadioRow: {
+    backgroundColor: 'rgba(83, 38, 98, 0.94)',
+    borderColor: 'rgba(255, 211, 110, 0.86)',
+    shadowColor: colors.gold,
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.26,
+    shadowRadius: 8,
+  },
   radioText: {
     color: '#F0DFFF',
     fontFamily: fonts.bodySemi,
@@ -566,6 +647,14 @@ const styles = StyleSheet.create({
     paddingHorizontal: 11,
     width: '48.5%',
   },
+  selectedChip: {
+    backgroundColor: 'rgba(83, 38, 98, 0.94)',
+    borderColor: 'rgba(255, 211, 110, 0.8)',
+    shadowColor: colors.gold,
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.2,
+    shadowRadius: 7,
+  },
   wideChip: {
     width: '100%',
   },
@@ -577,6 +666,20 @@ const styles = StyleSheet.create({
     letterSpacing: 0,
     lineHeight: 16,
   },
+  selectedControlText: {
+    color: colors.cream,
+  },
+  selectedDot: {
+    backgroundColor: colors.gold,
+    borderRadius: 999,
+    height: 6,
+    marginLeft: 'auto',
+    width: 6,
+  },
+  pressedControl: {
+    opacity: 0.82,
+    transform: [{ scale: 0.99 }],
+  },
   bottomActions: {
     gap: 10,
     marginTop: 'auto',
@@ -584,6 +687,10 @@ const styles = StyleSheet.create({
   },
   buttonPressable: {
     borderRadius: 999,
+  },
+  pressedButton: {
+    opacity: 0.88,
+    transform: [{ scale: 0.99 }],
   },
   button: {
     alignItems: 'center',
