@@ -11,6 +11,7 @@ import {
 } from '@expo-google-fonts/nunito-sans';
 import { Stack } from 'expo-router';
 
+import { SoundProvider } from '@/sound/nova-sound';
 import { colors } from '@/theme';
 
 export default function RootLayout() {
@@ -29,11 +30,13 @@ export default function RootLayout() {
   }
 
   return (
-    <Stack
-      screenOptions={{
-        contentStyle: { backgroundColor: colors.background.base },
-        headerShown: false,
-      }}
-    />
+    <SoundProvider>
+      <Stack
+        screenOptions={{
+          contentStyle: { backgroundColor: colors.background.base },
+          headerShown: false,
+        }}
+      />
+    </SoundProvider>
   );
 }

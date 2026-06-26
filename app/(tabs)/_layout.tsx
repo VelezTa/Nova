@@ -3,6 +3,7 @@ import { Tabs } from 'expo-router';
 import type { ComponentProps } from 'react';
 import { StyleSheet, View, type ColorValue } from 'react-native';
 
+import { CosmicGlow } from '@/components';
 import { colors, radii, spacing, typography } from '@/theme';
 
 type TabIconName = ComponentProps<typeof Ionicons>['name'];
@@ -28,13 +29,15 @@ function tabIcon(name: TabIconName, focusedName: TabIconName = name) {
 function novaTabIcon() {
   return function NovaTabIcon({ focused }: { focused: boolean }) {
     return (
-      <View style={[styles.novaIcon, focused && styles.novaIconFocused]}>
-        <Ionicons
-          color={colors.accent.gold}
-          name={focused ? 'sparkles' : 'sparkles-outline'}
-          size={31}
-        />
-      </View>
+      <CosmicGlow intensity={focused ? 'strong' : 'soft'}>
+        <View style={[styles.novaIcon, focused && styles.novaIconFocused]}>
+          <Ionicons
+            color={colors.accent.gold}
+            name={focused ? 'sparkles' : 'sparkles-outline'}
+            size={31}
+          />
+        </View>
+      </CosmicGlow>
     );
   };
 }

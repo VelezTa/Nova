@@ -1,6 +1,6 @@
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { useRouter } from 'expo-router';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 
 import {
   RealBirthDateScreen,
@@ -18,6 +18,8 @@ import {
   AppButton,
   Badge,
   CelestialCard,
+  CosmicGlow,
+  CosmicPressable,
   CosmicScreen,
   EmptyStateCard,
   type IconName,
@@ -29,6 +31,7 @@ import {
   ShareCardPreview,
   StaticField,
 } from '@/components';
+import { useNovaSound } from '@/sound/nova-sound';
 import { colors, spacing, typography } from '@/theme';
 
 const dailyMessage =
@@ -359,9 +362,11 @@ function EnergyBadge({
 
   return (
     <View style={styles.energyBadge}>
-      <View style={styles.energyIcon}>
-        <Ionicons name={icon} color={iconColor} size={24} />
-      </View>
+      <CosmicGlow>
+        <View style={styles.energyIcon}>
+          <Ionicons name={icon} color={iconColor} size={24} />
+        </View>
+      </CosmicGlow>
       <Text style={styles.energyLabel}>{label}</Text>
       <View style={styles.energyDots}>
         <View style={styles.energyDot} />
@@ -383,11 +388,12 @@ function ExploreDestination({
   label: string;
 }) {
   const router = useRouter();
+  const { play } = useNovaSound();
 
   return (
-    <Pressable
-      accessibilityRole="button"
+    <CosmicPressable
       onPress={() => router.push(href as never)}
+      sound={() => play('card')}
       style={styles.exploreDestination}
     >
       <View style={styles.exploreIcon}>
@@ -395,7 +401,7 @@ function ExploreDestination({
       </View>
       <Text style={styles.exploreLabel}>{label}</Text>
       <Ionicons name="chevron-forward" color={colors.text.muted} size={18} />
-    </Pressable>
+    </CosmicPressable>
   );
 }
 

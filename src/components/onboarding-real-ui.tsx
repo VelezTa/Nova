@@ -19,6 +19,14 @@ import {
   CosmicOnboardingBackground,
   type CosmicOnboardingBackgroundVariant,
 } from './cosmic-onboarding-background';
+import {
+  AnimatedCosmicOverlay,
+  AnimatedGradientSheen,
+  CosmicGlow,
+  CosmicPressable,
+} from './cosmic-motion';
+
+import { MuteToggle, useNovaSound } from '@/sound/nova-sound';
 
 type IconName = ComponentProps<typeof Ionicons>['name'];
 type RouteTarget = string;
@@ -187,6 +195,7 @@ function SetupScreen({
   radioOptions = [],
   chips = [],
 }: SetupScreenProps) {
+  const { play } = useNovaSound();
   const [selectedRadio, setSelectedRadio] = useState<string | null>(
     radioOptions[0]?.label ?? null,
   );
@@ -235,7 +244,10 @@ function SetupScreen({
             <RadioRow
               key={option.label}
               {...option}
-              onPress={() => setSelectedRadio(option.label)}
+              onPress={() => {
+                play('tap');
+                setSelectedRadio(option.label);
+              }}
               selected={selectedRadio === option.label}
             />
           ))}
@@ -248,7 +260,10 @@ function SetupScreen({
             <InterestChip
               key={chip.label}
               {...chip}
-              onPress={() => toggleChip(chip.label)}
+              onPress={() => {
+                play('tap');
+                toggleChip(chip.label);
+              }}
               selected={selectedChips.has(chip.label)}
             />
           ))}
@@ -278,6 +293,7 @@ function OnboardingScreen({
         style={StyleSheet.absoluteFill}
       />
       <CosmicOnboardingBackground variant={variant} />
+      <AnimatedCosmicOverlay />
       <SafeAreaView edges={['top', 'left', 'right']} style={styles.safeArea}>
         <View
           style={[
@@ -289,6 +305,9 @@ function OnboardingScreen({
         >
           {children}
         </View>
+        <View style={styles.soundControl}>
+          <MuteToggle />
+        </View>
       </SafeAreaView>
     </View>
   );
@@ -296,9 +315,11 @@ function OnboardingScreen({
 
 function SparkleBadge() {
   return (
-    <View style={styles.sparkleBadge}>
-      <SparkleIcon size={38} />
-    </View>
+    <CosmicGlow>
+      <View style={styles.sparkleBadge}>
+        <SparkleIcon size={38} />
+      </View>
+    </CosmicGlow>
   );
 }
 
@@ -441,15 +462,13 @@ function GradientButton({
   label: string;
 }) {
   const router = useRouter();
+  const { play } = useNovaSound();
 
   return (
-    <Pressable
-      accessibilityRole="button"
+    <CosmicPressable
       onPress={() => router.push(href as never)}
-      style={({ pressed }) => [
-        styles.buttonPressable,
-        pressed && styles.pressedButton,
-      ]}
+      sound={() => play('tap')}
+      style={styles.buttonPressable}
     >
       <LinearGradient
         colors={['#FFD06F', '#EA78D6', '#8B45FF']}
@@ -459,8 +478,9 @@ function GradientButton({
       >
         {icon ? <Ionicons name={icon} color={colors.ink} size={26} /> : null}
         <Text style={styles.buttonText}>{label}</Text>
+        <AnimatedGradientSheen />
       </LinearGradient>
-    </Pressable>
+    </CosmicPressable>
   );
 }
 
@@ -477,6 +497,12 @@ const styles = StyleSheet.create({
   },
   safeArea: {
     flex: 1,
+  },
+  soundControl: {
+    left: 28,
+    position: 'absolute',
+    top: 58,
+    zIndex: 4,
   },
   content: {
     alignSelf: 'center',

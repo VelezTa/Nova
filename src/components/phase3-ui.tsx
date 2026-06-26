@@ -14,6 +14,16 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import {
+  AnimatedCosmicOverlay,
+  AnimatedGradientSheen,
+  CosmicEntrance,
+  CosmicGlow,
+  CosmicPressable,
+  CosmicSparkleDrift,
+} from './cosmic-motion';
+
+import { MuteToggle, useNovaSound } from '@/sound/nova-sound';
+import {
   colors,
   gradients,
   layout,
@@ -45,7 +55,8 @@ export function CosmicScreen({
 
   return (
     <LinearGradient colors={gradients.screen} style={styles.screen}>
-      {background ?? <StarField />}
+      {background ?? <AnimatedCosmicOverlay />}
+      <AnimatedCosmicOverlay />
       <SafeAreaView style={styles.safeArea}>
         {scroll ? (
           <ScrollView
@@ -57,21 +68,11 @@ export function CosmicScreen({
         ) : (
           content
         )}
+        <View style={styles.soundControl}>
+          <MuteToggle />
+        </View>
       </SafeAreaView>
     </LinearGradient>
-  );
-}
-
-function StarField() {
-  return (
-    <View style={styles.starField}>
-      <View style={[styles.glowOrb, styles.glowOrbOne]} />
-      <View style={[styles.glowOrb, styles.glowOrbTwo]} />
-      <Text style={[styles.star, styles.starOne]}>✦</Text>
-      <Text style={[styles.star, styles.starTwo]}>✧</Text>
-      <Text style={[styles.star, styles.starThree]}>•</Text>
-      <Text style={[styles.star, styles.starFour]}>✦</Text>
-    </View>
   );
 }
 
@@ -130,6 +131,7 @@ export function AppButton({
   style,
 }: ButtonProps) {
   const router = useRouter();
+  const { play } = useNovaSound();
 
   const handlePress = () => {
     if (disabled) {
@@ -148,10 +150,10 @@ export function AppButton({
 
   if (variant === 'primary') {
     return (
-      <Pressable
-        accessibilityRole="button"
+      <CosmicPressable
         disabled={disabled}
         onPress={handlePress}
+        sound={() => play('tap')}
         style={[styles.buttonBase, disabled && styles.disabled, style]}
       >
         <LinearGradient
@@ -164,16 +166,17 @@ export function AppButton({
             <Ionicons name={icon} color={colors.text.inverse} size={18} />
           ) : null}
           <Text style={styles.primaryButtonText}>{label}</Text>
+          <AnimatedGradientSheen />
         </LinearGradient>
-      </Pressable>
+      </CosmicPressable>
     );
   }
 
   return (
-    <Pressable
-      accessibilityRole="button"
+    <CosmicPressable
       disabled={disabled}
       onPress={handlePress}
+      sound={() => play('tap')}
       style={[
         styles.buttonBase,
         variant === 'secondary' ? styles.secondaryButton : styles.ghostButton,
@@ -192,7 +195,7 @@ export function AppButton({
       >
         {label}
       </Text>
-    </Pressable>
+    </CosmicPressable>
   );
 }
 
@@ -213,24 +216,39 @@ export function CelestialCard({
   style,
 }: CardProps) {
   return (
-    <LinearGradient colors={gradients.card} style={[styles.card, style]}>
-      {(title || eyebrow || icon) && (
-        <View style={styles.cardHeader}>
-          <View style={styles.cardTitleBlock}>
-            {eyebrow ? <Text style={styles.cardEyebrow}>{eyebrow}</Text> : null}
-            {title ? <Text style={styles.cardTitle}>{title}</Text> : null}
-          </View>
-          {icon ? (
-            <View style={styles.cardIcon}>
-              <Ionicons name={icon} color={colors.accent.gold} size={21} />
+    <CosmicEntrance>
+      <CosmicGlow>
+        <LinearGradient colors={gradients.card} style={[styles.card, style]}>
+          <CosmicSparkleDrift />
+          {(title || eyebrow || icon) && (
+            <View style={styles.cardHeader}>
+              <View style={styles.cardTitleBlock}>
+                {eyebrow ? (
+                  <Text style={styles.cardEyebrow}>{eyebrow}</Text>
+                ) : null}
+                {title ? <Text style={styles.cardTitle}>{title}</Text> : null}
+              </View>
+              {icon ? (
+                <View style={styles.cardIcon}>
+                  <Ionicons name={icon} color={colors.accent.gold} size={21} />
+                </View>
+              ) : null}
             </View>
-          ) : null}
-        </View>
-      )}
-      <View>{children}</View>
-      {footer ? <View style={styles.cardFooter}>{footer}</View> : null}
-    </LinearGradient>
+          )}
+          <View>{children}</View>
+          {footer ? <View style={styles.cardFooter}>{footer}</View> : null}
+        </LinearGradient>
+      </CosmicGlow>
+    </CosmicEntrance>
   );
+}
+
+export function CosmicCard(props: CardProps) {
+  return <CelestialCard {...props} />;
+}
+
+export function AnimatedGradientButton(props: ButtonProps) {
+  return <AppButton {...props} />;
 }
 
 type SectionHeaderProps = {
@@ -272,11 +290,12 @@ export function FeatureShortcutCard({
   href,
 }: FeatureShortcutProps) {
   const router = useRouter();
+  const { play } = useNovaSound();
 
   return (
-    <Pressable
-      accessibilityRole="button"
+    <CosmicPressable
       onPress={() => router.push(href as never)}
+      sound={() => play('card')}
       style={styles.shortcut}
     >
       <View style={styles.shortcutIcon}>
@@ -284,7 +303,7 @@ export function FeatureShortcutCard({
       </View>
       <Text style={styles.shortcutTitle}>{title}</Text>
       <Text style={styles.shortcutDescription}>{description}</Text>
-    </Pressable>
+    </CosmicPressable>
   );
 }
 
@@ -437,22 +456,27 @@ export function ShareCardPreview({
   message = 'Today invites you to slow down, listen closely, and choose what feels peaceful.',
 }: ShareCardPreviewProps) {
   return (
-    <LinearGradient colors={gradients.shareCard} style={styles.shareCard}>
-      <Text style={styles.shareMoon}>☾</Text>
-      <Text style={styles.shareEyebrow}>Nova daily card</Text>
-      <Text style={styles.shareTitle}>{title}</Text>
-      <Text style={styles.shareMessage}>{message}</Text>
-      <View style={styles.shareMetaRow}>
-        <View>
-          <Text style={styles.shareMetaLabel}>Color</Text>
-          <Text style={styles.shareMetaValue}>Gold</Text>
-        </View>
-        <View>
-          <Text style={styles.shareMetaLabel}>Number</Text>
-          <Text style={styles.shareMetaValue}>7</Text>
-        </View>
-      </View>
-    </LinearGradient>
+    <CosmicEntrance>
+      <CosmicGlow intensity="strong">
+        <LinearGradient colors={gradients.shareCard} style={styles.shareCard}>
+          <CosmicSparkleDrift />
+          <Text style={styles.shareMoon}>☾</Text>
+          <Text style={styles.shareEyebrow}>Nova daily card</Text>
+          <Text style={styles.shareTitle}>{title}</Text>
+          <Text style={styles.shareMessage}>{message}</Text>
+          <View style={styles.shareMetaRow}>
+            <View>
+              <Text style={styles.shareMetaLabel}>Color</Text>
+              <Text style={styles.shareMetaValue}>Gold</Text>
+            </View>
+            <View>
+              <Text style={styles.shareMetaLabel}>Number</Text>
+              <Text style={styles.shareMetaValue}>7</Text>
+            </View>
+          </View>
+        </LinearGradient>
+      </CosmicGlow>
+    </CosmicEntrance>
   );
 }
 
@@ -482,6 +506,12 @@ const styles = StyleSheet.create({
   },
   safeArea: {
     flex: 1,
+  },
+  soundControl: {
+    left: spacing.lg,
+    position: 'absolute',
+    top: spacing.lg,
+    zIndex: 4,
   },
   scrollContent: {
     flexGrow: 1,

@@ -5,7 +5,6 @@ import { StatusBar } from 'expo-status-bar';
 import type { ComponentProps } from 'react';
 import {
   Image,
-  Pressable,
   StyleSheet,
   Text,
   useWindowDimensions,
@@ -23,6 +22,15 @@ import Svg, {
 import clarityBackground from '../../assets/images/reference-intro-background-clarity.png';
 import safeSpaceBackground from '../../assets/images/reference-intro-background-safe-space.png';
 import welcomeBackground from '../../assets/images/reference-intro-background-welcome.png';
+
+import {
+  AnimatedCosmicOverlay,
+  AnimatedGradientSheen,
+  CosmicGlow,
+  CosmicPressable,
+} from './cosmic-motion';
+
+import { MuteToggle, useNovaSound } from '@/sound/nova-sound';
 
 type IconName = ComponentProps<typeof Ionicons>['name'];
 type RouteTarget = string;
@@ -132,6 +140,7 @@ function ReferenceIntroScreen({ content }: { content: IntroContent }) {
         style={StyleSheet.absoluteFill}
       />
       <VignetteLayer />
+      <AnimatedCosmicOverlay />
       <SafeAreaView edges={['top', 'left', 'right']} style={styles.safeArea}>
         <View
           style={[
@@ -140,9 +149,11 @@ function ReferenceIntroScreen({ content }: { content: IntroContent }) {
             { maxWidth },
           ]}
         >
-          <View style={styles.brandMark}>
-            <Text style={styles.brandStar}>✦</Text>
-          </View>
+          <CosmicGlow>
+            <View style={styles.brandMark}>
+              <Text style={styles.brandStar}>✦</Text>
+            </View>
+          </CosmicGlow>
 
           <View
             style={[styles.copyBlock, variantStyles[content.variant].copyBlock]}
@@ -171,6 +182,9 @@ function ReferenceIntroScreen({ content }: { content: IntroContent }) {
               onPress={() => router.push(content.nextHref as never)}
             />
           </View>
+        </View>
+        <View style={styles.soundControl}>
+          <MuteToggle />
         </View>
       </SafeAreaView>
     </View>
@@ -205,14 +219,13 @@ function GradientButton({
   label: string;
   onPress: () => void;
 }) {
+  const { play } = useNovaSound();
+
   return (
-    <Pressable
-      accessibilityRole="button"
+    <CosmicPressable
       onPress={onPress}
-      style={({ pressed }) => [
-        styles.buttonPressable,
-        pressed && styles.pressedButton,
-      ]}
+      sound={() => play('tap')}
+      style={styles.buttonPressable}
     >
       <LinearGradient
         colors={['#FFD06F', '#EA78D6', '#7A3AFB']}
@@ -221,8 +234,9 @@ function GradientButton({
         style={styles.button}
       >
         <Text style={styles.buttonText}>{label}</Text>
+        <AnimatedGradientSheen />
       </LinearGradient>
-    </Pressable>
+    </CosmicPressable>
   );
 }
 
@@ -359,12 +373,14 @@ const styles = StyleSheet.create({
     gap: 14,
     justifyContent: 'center',
   },
-  pressedButton: {
-    opacity: 0.88,
-    transform: [{ scale: 0.99 }],
-  },
   safeArea: {
     flex: 1,
+  },
+  soundControl: {
+    left: 28,
+    position: 'absolute',
+    top: 58,
+    zIndex: 4,
   },
   screen: {
     backgroundColor: colors.ink,

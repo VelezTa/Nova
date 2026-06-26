@@ -16,6 +16,8 @@ import clarityBackground from '../../assets/images/reference-intro-background-cl
 import safeSpaceBackground from '../../assets/images/reference-intro-background-safe-space.png';
 import welcomeBackground from '../../assets/images/reference-intro-background-welcome.png';
 
+import { AnimatedCosmicOverlay } from './cosmic-motion';
+
 type VisualBackgroundVariant =
   | 'birthDate'
   | 'birthPlace'
@@ -73,6 +75,7 @@ export function Phase3VisualBackground({ variant }: VisualBackgroundProps) {
       />
       <View style={[styles.readabilityScrim, scrim]} />
       <VignetteLayer />
+      <AnimatedCosmicOverlay />
     </View>
   );
 }
@@ -100,6 +103,7 @@ export function HomeFeatureCardBackground({
         locations={[0, 0.48, 1]}
         style={StyleSheet.absoluteFill}
       />
+      <AnimatedCosmicOverlay />
       {children}
     </ImageBackground>
   );
