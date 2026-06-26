@@ -1,83 +1,124 @@
-import Ionicons from '@expo/vector-icons/Ionicons';
 import { useAudioPlayer, setAudioModeAsync } from 'expo-audio';
 import * as SecureStore from 'expo-secure-store';
 import type { PropsWithChildren } from 'react';
 import { createContext, useContext, useEffect, useMemo, useState } from 'react';
-import { Pressable, StyleSheet, View } from 'react-native';
 
 import cardOpenSound from '../../assets/audio/nova-card-open.wav';
 import natureRiverLoop from '../../assets/audio/nova-nature-river.mp3';
 import softTapSound from '../../assets/audio/nova-soft-tap.wav';
 
-import { colors, layout, radii } from '@/theme';
-
 type NovaSoundName = 'ambient' | 'card' | 'tap';
+export type NovaSoundVolume = 'soft' | 'balanced' | 'full';
 
 type SoundContextValue = {
-  muted: boolean;
+  ambientEnabled: boolean;
+  effectsEnabled: boolean;
   play: (sound: Exclude<NovaSoundName, 'ambient'>) => void;
-  toggleMuted: () => void;
+  ready: boolean;
+  setAmbientEnabled: (enabled: boolean) => void;
+  setEffectsEnabled: (enabled: boolean) => void;
+  setVolume: (volume: NovaSoundVolume) => void;
+  volume: NovaSoundVolume;
 };
 
 const SoundContext = createContext<SoundContextValue | null>(null);
-const mutePreferenceKey = 'nova.sound.muted.v3';
+const ambientPreferenceKey = 'nova.sound.ambient.enabled.v2';
+const effectsPreferenceKey = 'nova.sound.effects.enabled.v1';
+const legacyMutePreferenceKey = 'nova.sound.muted.v3';
+const volumePreferenceKey = 'nova.sound.volume.v1';
+
+const volumeLevel: Record<NovaSoundVolume, number> = {
+  soft: 0.42,
+  balanced: 0.68,
+  full: 0.88,
+};
 
 export function SoundProvider({ children }: PropsWithChildren) {
   const ambientPlayer = useAudioPlayer(natureRiverLoop);
   const cardPlayer = useAudioPlayer(cardOpenSound);
   const tapPlayer = useAudioPlayer(softTapSound);
-  const [muted, setMuted] = useState(false);
+  const [ambientEnabled, setAmbientEnabledState] = useState(true);
+  const [effectsEnabled, setEffectsEnabledState] = useState(true);
   const [ready, setReady] = useState(false);
+  const [volume, setVolumeState] = useState<NovaSoundVolume>('balanced');
 
   useEffect(() => {
     setAudioModeAsync({
-      playsInSilentMode: false,
+      playsInSilentMode: true,
       shouldPlayInBackground: false,
     }).catch(() => undefined);
 
-    SecureStore.getItemAsync(mutePreferenceKey)
-      .then((stored) => {
-        if (stored === 'false') {
-          setMuted(false);
+    Promise.all([
+      SecureStore.getItemAsync(ambientPreferenceKey),
+      SecureStore.getItemAsync(effectsPreferenceKey),
+      SecureStore.getItemAsync(volumePreferenceKey),
+      SecureStore.getItemAsync(legacyMutePreferenceKey),
+    ])
+      .then(([storedAmbient, storedEffects, storedVolume, legacyMuted]) => {
+        if (storedAmbient === 'false') {
+          setAmbientEnabledState(false);
+        }
+
+        if (storedEffects === 'false' || legacyMuted === 'true') {
+          setEffectsEnabledState(false);
+        }
+
+        if (
+          storedVolume === 'soft' ||
+          storedVolume === 'balanced' ||
+          storedVolume === 'full'
+        ) {
+          setVolumeState(storedVolume);
         }
       })
       .finally(() => setReady(true));
   }, []);
 
   useEffect(() => {
+    const level = volumeLevel[volume];
+
     // expo-audio exposes loop and volume as player properties.
     // eslint-disable-next-line react-hooks/immutability
     ambientPlayer.loop = true;
-    ambientPlayer.volume = 0.72;
+    ambientPlayer.volume = level * 0.74;
     // eslint-disable-next-line react-hooks/immutability
-    cardPlayer.volume = 0.48;
+    cardPlayer.volume = level * 0.62;
     // eslint-disable-next-line react-hooks/immutability
-    tapPlayer.volume = 0.38;
-  }, [ambientPlayer, cardPlayer, tapPlayer]);
+    tapPlayer.volume = level * 0.5;
+  }, [ambientPlayer, cardPlayer, tapPlayer, volume]);
 
   useEffect(() => {
     if (!ready) {
       return;
     }
 
-    SecureStore.setItemAsync(mutePreferenceKey, String(muted)).catch(
+    SecureStore.setItemAsync(
+      ambientPreferenceKey,
+      String(ambientEnabled),
+    ).catch(() => undefined);
+    SecureStore.setItemAsync(
+      effectsPreferenceKey,
+      String(effectsEnabled),
+    ).catch(() => undefined);
+    SecureStore.setItemAsync(volumePreferenceKey, volume).catch(
       () => undefined,
     );
 
-    if (muted) {
+    if (!ambientEnabled) {
       ambientPlayer.pause();
       return;
     }
 
     ambientPlayer.seekTo(0).catch(() => undefined);
     ambientPlayer.play();
-  }, [ambientPlayer, muted, ready]);
+  }, [ambientEnabled, ambientPlayer, effectsEnabled, ready, volume]);
 
   const value = useMemo<SoundContextValue>(
     () => ({
-      muted,
+      ambientEnabled,
+      effectsEnabled,
       play(sound) {
-        if (muted) {
+        if (!ready || !effectsEnabled) {
           return;
         }
 
@@ -86,11 +127,13 @@ export function SoundProvider({ children }: PropsWithChildren) {
         player.seekTo(0).catch(() => undefined);
         player.play();
       },
-      toggleMuted() {
-        setMuted((current) => !current);
-      },
+      ready,
+      setAmbientEnabled: setAmbientEnabledState,
+      setEffectsEnabled: setEffectsEnabledState,
+      setVolume: setVolumeState,
+      volume,
     }),
-    [cardPlayer, muted, tapPlayer],
+    [ambientEnabled, cardPlayer, effectsEnabled, ready, tapPlayer, volume],
   );
 
   return (
@@ -103,67 +146,16 @@ export function useNovaSound() {
 
   if (!context) {
     return {
-      muted: true,
+      ambientEnabled: false,
+      effectsEnabled: false,
       play: () => undefined,
-      toggleMuted: () => undefined,
+      ready: false,
+      setAmbientEnabled: () => undefined,
+      setEffectsEnabled: () => undefined,
+      setVolume: () => undefined,
+      volume: 'balanced',
     } satisfies SoundContextValue;
   }
 
   return context;
 }
-
-export function MuteToggle() {
-  const { muted, play, toggleMuted } = useNovaSound();
-
-  return (
-    <Pressable
-      accessibilityLabel={muted ? 'Unmute Nova sounds' : 'Mute Nova sounds'}
-      accessibilityRole="button"
-      onPress={() => {
-        if (muted) {
-          toggleMuted();
-          return;
-        }
-
-        play('tap');
-        toggleMuted();
-      }}
-      style={styles.toggle}
-    >
-      <View style={[styles.statusDot, !muted && styles.statusDotActive]} />
-      <Ionicons
-        color={colors.accent.gold}
-        name={muted ? 'volume-mute-outline' : 'volume-high-outline'}
-        size={22}
-      />
-    </Pressable>
-  );
-}
-
-const styles = StyleSheet.create({
-  toggle: {
-    alignItems: 'center',
-    backgroundColor: 'rgba(14, 9, 42, 0.92)',
-    borderColor: 'rgba(255, 211, 110, 0.74)',
-    borderRadius: radii.pill,
-    borderWidth: 1.4,
-    height: layout.minTouchTarget + 6,
-    justifyContent: 'center',
-    shadowColor: colors.accent.gold,
-    shadowOpacity: 0.42,
-    shadowRadius: 16,
-    width: layout.minTouchTarget + 6,
-  },
-  statusDot: {
-    backgroundColor: colors.text.muted,
-    borderRadius: radii.pill,
-    height: 7,
-    position: 'absolute',
-    right: 7,
-    top: 7,
-    width: 7,
-  },
-  statusDotActive: {
-    backgroundColor: colors.accent.positive,
-  },
-});

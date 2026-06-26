@@ -24,6 +24,10 @@ type StarSeed = {
   top: `${number}%`;
 };
 
+type NaturalSparkleSeed = StarSeed & {
+  peakOpacity: number;
+};
+
 const starSeeds: StarSeed[] = [
   { left: '8%', top: '11%', size: 2.5, delay: 0, duration: 3200, drift: 5 },
   { left: '18%', top: '27%', size: 3.8, delay: 720, duration: 4600, drift: -4 },
@@ -113,9 +117,168 @@ export function useReducedMotionPreference() {
 export function AnimatedCosmicOverlay() {
   return (
     <View pointerEvents="none" style={StyleSheet.absoluteFill}>
+      <AuroraScreenSweep />
       <RiverLightReflection />
       <TwinklingStars />
+      <OrganicSparkles />
     </View>
+  );
+}
+
+export function AuroraScreenSweep() {
+  const reducedMotion = useReducedMotionPreference();
+  const [progress] = useState(() => new Animated.Value(0));
+
+  useEffect(() => {
+    if (reducedMotion) {
+      return;
+    }
+
+    const animation = Animated.loop(
+      Animated.timing(progress, {
+        duration: 11000,
+        easing: Easing.inOut(Easing.sin),
+        toValue: 1,
+        useNativeDriver: true,
+      }),
+    );
+
+    animation.start();
+
+    return () => animation.stop();
+  }, [progress, reducedMotion]);
+
+  if (reducedMotion) {
+    return null;
+  }
+
+  const translateX = progress.interpolate({
+    inputRange: [0, 1],
+    outputRange: [-180, 180],
+  });
+  const opacity = progress.interpolate({
+    inputRange: [0, 0.5, 1],
+    outputRange: [0.02, 0.1, 0.02],
+  });
+
+  return (
+    <Animated.View
+      style={[
+        styles.auroraSweep,
+        { opacity, transform: [{ translateX }, { rotate: '-12deg' }] },
+      ]}
+    >
+      <LinearGradient
+        colors={[
+          'rgba(255, 255, 255, 0)',
+          'rgba(255, 232, 171, 0.18)',
+          'rgba(198, 181, 255, 0.12)',
+          'rgba(255, 255, 255, 0)',
+        ]}
+        start={{ x: 0, y: 0.5 }}
+        end={{ x: 1, y: 0.5 }}
+        style={StyleSheet.absoluteFill}
+      />
+    </Animated.View>
+  );
+}
+
+export function OrganicSparkles() {
+  const [sparkles] = useState<NaturalSparkleSeed[]>(() =>
+    Array.from({ length: 14 }, (_, index) => ({
+      delay: 360 + Math.round(Math.random() * 4200) + index * 80,
+      drift: Math.round(Math.random() * 8) - 4,
+      duration: 4200 + Math.round(Math.random() * 4600),
+      left: `${Math.round(5 + Math.random() * 90)}%` as `${number}%`,
+      peakOpacity: 0.28 + Math.random() * 0.36,
+      size: 1.4 + Math.random() * 3.8,
+      top: `${Math.round(6 + Math.random() * 86)}%` as `${number}%`,
+    })),
+  );
+
+  return (
+    <View style={styles.organicSparkleLayer}>
+      {sparkles.map((sparkle) => (
+        <OrganicSparkle
+          key={`${sparkle.left}-${sparkle.top}-${sparkle.delay}`}
+          {...sparkle}
+        />
+      ))}
+    </View>
+  );
+}
+
+function OrganicSparkle({
+  delay,
+  drift,
+  duration,
+  left,
+  peakOpacity,
+  size,
+  top,
+}: NaturalSparkleSeed) {
+  const reducedMotion = useReducedMotionPreference();
+  const [twinkle] = useState(() => new Animated.Value(0));
+
+  useEffect(() => {
+    if (reducedMotion) {
+      return;
+    }
+
+    const animation = Animated.loop(
+      Animated.sequence([
+        Animated.delay(delay),
+        Animated.timing(twinkle, {
+          duration,
+          easing: Easing.inOut(Easing.sin),
+          toValue: 1,
+          useNativeDriver: true,
+        }),
+        Animated.timing(twinkle, {
+          duration: Math.round(duration * 0.9),
+          easing: Easing.inOut(Easing.sin),
+          toValue: 0,
+          useNativeDriver: true,
+        }),
+      ]),
+    );
+
+    animation.start();
+
+    return () => animation.stop();
+  }, [delay, duration, reducedMotion, twinkle]);
+
+  if (reducedMotion) {
+    return null;
+  }
+
+  const translateY = twinkle.interpolate({
+    inputRange: [0, 1],
+    outputRange: [0, drift],
+  });
+  const scale = twinkle.interpolate({
+    inputRange: [0, 0.55, 1],
+    outputRange: [0.86, 1.2, 0.92],
+  });
+  const opacity = twinkle.interpolate({
+    inputRange: [0, 0.45, 1],
+    outputRange: [0, peakOpacity, 0],
+  });
+
+  return (
+    <Animated.View
+      style={[
+        styles.organicSparkle,
+        {
+          height: size,
+          left,
+          opacity,
+          top,
+          transform: [{ translateY }, { scale }],
+          width: size,
+        },
+      ]}
+    />
   );
 }
 
@@ -411,6 +574,53 @@ export function CosmicEntrance({ children, delay = 0, style }: EntranceProps) {
   );
 }
 
+export function ScreenTransition({
+  children,
+  delay = 0,
+  style,
+}: EntranceProps) {
+  const reducedMotion = useReducedMotionPreference();
+  const [progress] = useState(() => new Animated.Value(0));
+
+  useEffect(() => {
+    if (reducedMotion) {
+      progress.setValue(1);
+      return;
+    }
+
+    Animated.timing(progress, {
+      delay,
+      duration: 520,
+      easing: Easing.out(Easing.cubic),
+      toValue: 1,
+      useNativeDriver: true,
+    }).start();
+  }, [delay, progress, reducedMotion]);
+
+  const translateY = progress.interpolate({
+    inputRange: [0, 1],
+    outputRange: [10, 0],
+  });
+  const scale = progress.interpolate({
+    inputRange: [0, 1],
+    outputRange: [0.988, 1],
+  });
+
+  return (
+    <Animated.View
+      style={[
+        style,
+        {
+          opacity: progress,
+          transform: reducedMotion ? undefined : [{ translateY }, { scale }],
+        },
+      ]}
+    >
+      {children}
+    </Animated.View>
+  );
+}
+
 type CosmicPressableProps = PropsWithChildren<{
   disabled?: boolean;
   onPress?: (event: GestureResponderEvent) => void;
@@ -515,6 +725,14 @@ export function AnimatedGradientSheen() {
 }
 
 const styles = StyleSheet.create({
+  auroraSweep: {
+    bottom: '-6%',
+    left: '-18%',
+    overflow: 'hidden',
+    position: 'absolute',
+    top: '-10%',
+    width: '82%',
+  },
   buttonSheen: {
     bottom: 0,
     left: '20%',
@@ -534,6 +752,21 @@ const styles = StyleSheet.create({
   glowWrapper: {
     alignSelf: 'flex-start',
     position: 'relative',
+  },
+  organicSparkle: {
+    backgroundColor: 'rgba(255, 246, 210, 0.92)',
+    borderRadius: 999,
+    position: 'absolute',
+    shadowColor: colors.accent.gold,
+    shadowOpacity: 0.28,
+    shadowRadius: 8,
+  },
+  organicSparkleLayer: {
+    bottom: 0,
+    left: 0,
+    position: 'absolute',
+    right: 0,
+    top: 0,
   },
   riverReflection: {
     bottom: 84,

@@ -28,9 +28,10 @@ import {
   AnimatedGradientSheen,
   CosmicGlow,
   CosmicPressable,
+  ScreenTransition,
 } from './cosmic-motion';
 
-import { MuteToggle, useNovaSound } from '@/sound/nova-sound';
+import { useNovaSound } from '@/sound/nova-sound';
 
 type IconName = ComponentProps<typeof Ionicons>['name'];
 type RouteTarget = string;
@@ -142,7 +143,7 @@ function ReferenceIntroScreen({ content }: { content: IntroContent }) {
       <VignetteLayer />
       <AnimatedCosmicOverlay />
       <SafeAreaView edges={['top', 'left', 'right']} style={styles.safeArea}>
-        <View
+        <ScreenTransition
           style={[
             styles.content,
             compact && styles.compactContent,
@@ -182,10 +183,7 @@ function ReferenceIntroScreen({ content }: { content: IntroContent }) {
               onPress={() => router.push(content.nextHref as never)}
             />
           </View>
-        </View>
-        <View style={styles.soundControl}>
-          <MuteToggle />
-        </View>
+        </ScreenTransition>
       </SafeAreaView>
     </View>
   );
@@ -375,12 +373,6 @@ const styles = StyleSheet.create({
   },
   safeArea: {
     flex: 1,
-  },
-  soundControl: {
-    left: 28,
-    position: 'absolute',
-    top: 58,
-    zIndex: 4,
   },
   screen: {
     backgroundColor: colors.ink,

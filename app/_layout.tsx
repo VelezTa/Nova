@@ -33,6 +33,8 @@ export default function RootLayout() {
     <SoundProvider>
       <Stack
         screenOptions={{
+          animation: 'fade',
+          animationDuration: 350,
           contentStyle: { backgroundColor: colors.background.base },
           headerShown: false,
         }}

@@ -1,6 +1,6 @@
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { useRouter } from 'expo-router';
-import { StyleSheet, Text, View } from 'react-native';
+import { Pressable, StyleSheet, Switch, Text, View } from 'react-native';
 
 import {
   RealBirthDateScreen,
@@ -24,14 +24,14 @@ import {
   EmptyStateCard,
   type IconName,
   InfoList,
-  LoadingStateCard,
   PlaceholderNotice,
   SafeDisclaimerBlock,
   ScreenHeader,
+  SectionHeader,
   ShareCardPreview,
   StaticField,
 } from '@/components';
-import { useNovaSound } from '@/sound/nova-sound';
+import { useNovaSound, type NovaSoundVolume } from '@/sound/nova-sound';
 import { colors, spacing, typography } from '@/theme';
 
 const dailyMessage =
@@ -134,7 +134,7 @@ export function CosmicProfilePreviewScreen() {
         </View>
       </View>
 
-      <AppButton href="/home" label="Explore my daily guide ✨" />
+      <AppButton href="/home" label="Open my daily guide ✨" />
     </CosmicScreen>
   );
 }
@@ -149,85 +149,113 @@ export function HomeScreen() {
         <View>
           <Text style={styles.homeTitle}>Good evening, Erika ✨</Text>
           <Text style={styles.homeSubtitle}>
-            What energy would you like to explore today?
+            A softer daily rhythm for guidance, reflection, and clarity.
           </Text>
         </View>
-        <View style={styles.homeBell}>
+        <View style={styles.homeMark}>
           <Ionicons
-            name="notifications-outline"
+            name="sparkles-outline"
             color={colors.accent.gold}
             size={24}
           />
         </View>
       </View>
 
-      <View style={styles.featureCard}>
+      <View style={styles.dailySummaryCard}>
         <HomeFeatureCardBackground>
-          <View style={styles.featureCardOverlay}>
-            <View style={styles.featureIcon}>
-              <Ionicons
-                name="hand-left-outline"
-                color={colors.accent.gold}
-                size={23}
-              />
+          <View style={styles.dailySummaryOverlay}>
+            <View style={styles.dailySummaryTop}>
+              <View style={styles.featureIcon}>
+                <Ionicons
+                  name="sunny-outline"
+                  color={colors.accent.gold}
+                  size={23}
+                />
+              </View>
+              <Badge icon="sparkles-outline" tone="gold">
+                Daily energy
+              </Badge>
             </View>
-            <View style={styles.featureCopy}>
-              <Text style={styles.featureTitle}>Palm Reading</Text>
+            <View style={styles.dailySummaryCopy}>
+              <Text style={styles.featureTitle}>Clarity arrives gently</Text>
               <Text style={styles.featureBody}>
-                Discover symbolic signals in your energy
+                Today may support one calm choice, honest reflection, and a
+                little more trust in your own timing.
               </Text>
             </View>
-            <AppButton href="/palm" label="Start Reading" />
+            <AppButton href="/daily" label="Open today’s card" />
           </View>
         </HomeFeatureCardBackground>
       </View>
-    </CosmicScreen>
-  );
-}
 
-export function ExploreScreen() {
-  return (
-    <CosmicScreen
-      background={<Phase3VisualBackground variant="birthDate" />}
-      contentStyle={styles.exploreContent}
-    >
-      <ScreenHeader
-        body="Choose a static preview destination. These paths do not call AI, save data, or upload photos in this phase."
-        eyebrow="Explore"
-        icon="compass-outline"
-        title="Explore your energy"
-      />
-      <View style={styles.exploreList}>
-        <ExploreDestination
-          href="/palm"
-          icon="hand-left-outline"
-          label="Palm Reading"
+      <CelestialCard icon="chatbubble-ellipses-outline" title="Talk with Nova">
+        <Text style={styles.body}>
+          Ask for a grounded, positive perspective when you want emotional
+          clarity or a symbolic reading.
+        </Text>
+        <AppButton
+          href="/chat"
+          label="Start a calm chat"
+          style={styles.cardAction}
         />
-        <ExploreDestination
-          href="/compatibility"
-          icon="heart-outline"
-          label="Compatibility"
-        />
-        <ExploreDestination
-          href="/birth-chart"
-          icon="planet-outline"
-          label="Birth Chart"
-        />
-        <ExploreDestination
-          href="/weekly"
-          icon="calendar-outline"
-          label="Weekly Prediction"
-        />
-        <ExploreDestination
-          href="/daily"
-          icon="sunny-outline"
-          label="Energy of the Day"
-        />
-        <ExploreDestination
-          href="/rituals"
-          icon="flower-outline"
-          label="Rituals / Reflections"
-        />
+      </CelestialCard>
+
+      <View style={styles.homeSection}>
+        <SectionHeader title="Cosmic tools" />
+        <View style={styles.toolGrid}>
+          <HomeToolCard
+            description="A symbolic preview from the lines and shape of your hand."
+            href="/palm"
+            icon="hand-left-outline"
+            title="Palm reading"
+          />
+          <HomeToolCard
+            description="Reflect on connection patterns with positive guidance."
+            href="/compatibility"
+            icon="heart-outline"
+            title="Compatibility"
+          />
+          <HomeToolCard
+            description="See a calm static chart preview for future guidance."
+            href="/birth-chart"
+            icon="planet-outline"
+            title="Birth chart"
+          />
+          <HomeToolCard
+            description="Preview a softer rhythm for the days ahead."
+            href="/weekly"
+            icon="calendar-outline"
+            title="Weekly prediction"
+          />
+          <HomeToolCard
+            description="Open today's symbolic energy card."
+            href="/daily"
+            icon="sunny-outline"
+            title="Daily energy"
+          />
+          <HomeToolCard
+            description="Use gentle prompts for reflection and grounding."
+            href="/rituals"
+            icon="flower-outline"
+            title="Rituals"
+          />
+        </View>
+      </View>
+
+      <View style={styles.homeSection}>
+        <SectionHeader title="Reflect" />
+        <View style={styles.shortcutRow}>
+          <HomeSmallShortcut
+            href="/journal"
+            icon="journal-outline"
+            label="Journal"
+          />
+          <HomeSmallShortcut
+            href="/profile"
+            icon="person-circle-outline"
+            label="Cosmic profile"
+          />
+        </View>
       </View>
     </CosmicScreen>
   );
@@ -268,7 +296,7 @@ export function BirthChartScreen() {
     <CosmicScreen background={<Phase3VisualBackground variant="home" />}>
       <ScreenHeader
         body="A static placeholder for future symbolic birth chart guidance. No chart calculation or AI request is running here."
-        eyebrow="Explore"
+        eyebrow="Cosmic tool"
         icon="planet-outline"
         title="Birth Chart"
       />
@@ -288,7 +316,7 @@ export function RitualsScreen() {
     <CosmicScreen background={<Phase3VisualBackground variant="home" />}>
       <ScreenHeader
         body="A static placeholder for future reflective rituals and journaling prompts."
-        eyebrow="Explore"
+        eyebrow="Cosmic tool"
         icon="flower-outline"
         title="Rituals / Reflections"
       />
@@ -375,33 +403,6 @@ function EnergyBadge({
         <View style={[styles.energyDot, styles.energyDotMuted]} />
       </View>
     </View>
-  );
-}
-
-function ExploreDestination({
-  href,
-  icon,
-  label,
-}: {
-  href: string;
-  icon: IconName;
-  label: string;
-}) {
-  const router = useRouter();
-  const { play } = useNovaSound();
-
-  return (
-    <CosmicPressable
-      onPress={() => router.push(href as never)}
-      sound={() => play('card')}
-      style={styles.exploreDestination}
-    >
-      <View style={styles.exploreIcon}>
-        <Ionicons name={icon} color={colors.accent.gold} size={22} />
-      </View>
-      <Text style={styles.exploreLabel}>{label}</Text>
-      <Ionicons name="chevron-forward" color={colors.text.muted} size={18} />
-    </CosmicPressable>
   );
 }
 
@@ -617,7 +618,7 @@ export function CompatibilityIntroScreen() {
         title="Compatibility"
       />
       <PlaceholderNotice />
-      <CelestialCard icon="people-outline" title="Explore a connection">
+      <CelestialCard icon="people-outline" title="Connection preview">
         <Text style={styles.body}>
           Create a positive compatibility reading based on two symbolic
           profiles. This Phase 3 screen does not save or submit data.
@@ -803,7 +804,7 @@ export function SavedReadingsScreen() {
         actionLabel="Start preview"
         body="Create a positive compatibility reading based on two cosmic profiles later."
         icon="heart-outline"
-        title="Explore a connection"
+        title="Connection preview"
       />
     </CosmicScreen>
   );
@@ -813,11 +814,23 @@ export function SettingsScreen() {
   return (
     <CosmicScreen background={<Phase3VisualBackground variant="birthDate" />}>
       <ScreenHeader
-        body="Static settings target only. Preferences and account actions are not wired yet."
+        body="Keep preferences simple and quiet."
         icon="settings-outline"
         title="Settings"
       />
-      <PlaceholderNotice />
+      <SoundSettingsCard />
+      <CelestialCard icon="person-circle-outline" title="Profile">
+        <Text style={styles.body}>
+          View your cosmic profile preview, saved guidance, and future account
+          surfaces from here.
+        </Text>
+        <AppButton
+          href="/profile"
+          label="Open profile"
+          style={styles.cardAction}
+          variant="secondary"
+        />
+      </CelestialCard>
       <InfoList
         items={[
           {
@@ -837,12 +850,159 @@ export function SettingsScreen() {
           },
         ]}
       />
-      <LoadingStateCard
-        body="Preparing your guidance is represented with a calm placeholder animation style."
-        icon="moon-outline"
-        title="Loading state preview"
-      />
     </CosmicScreen>
+  );
+}
+
+function HomeToolCard({
+  description,
+  href,
+  icon,
+  title,
+}: {
+  description: string;
+  href: string;
+  icon: IconName;
+  title: string;
+}) {
+  const router = useRouter();
+  const { play } = useNovaSound();
+
+  return (
+    <CosmicPressable
+      onPress={() => router.push(href as never)}
+      sound={() => play('card')}
+      style={styles.homeToolCard}
+    >
+      <View style={styles.homeToolIcon}>
+        <Ionicons name={icon} color={colors.accent.gold} size={20} />
+      </View>
+      <Text style={styles.homeToolTitle}>{title}</Text>
+      <Text style={styles.homeToolDescription}>{description}</Text>
+    </CosmicPressable>
+  );
+}
+
+function HomeSmallShortcut({
+  href,
+  icon,
+  label,
+}: {
+  href: string;
+  icon: IconName;
+  label: string;
+}) {
+  const router = useRouter();
+  const { play } = useNovaSound();
+
+  return (
+    <CosmicPressable
+      onPress={() => router.push(href as never)}
+      sound={() => play('tap')}
+      style={styles.homeSmallShortcut}
+    >
+      <Ionicons name={icon} color={colors.accent.gold} size={18} />
+      <Text style={styles.homeSmallShortcutText}>{label}</Text>
+    </CosmicPressable>
+  );
+}
+
+const volumeOptions: { label: string; value: NovaSoundVolume }[] = [
+  { label: 'Soft', value: 'soft' },
+  { label: 'Balanced', value: 'balanced' },
+  { label: 'Full', value: 'full' },
+];
+
+function SoundSettingsCard() {
+  const {
+    ambientEnabled,
+    effectsEnabled,
+    setAmbientEnabled,
+    setEffectsEnabled,
+    setVolume,
+    volume,
+  } = useNovaSound();
+  const volumeDisabled = !ambientEnabled && !effectsEnabled;
+
+  return (
+    <CelestialCard icon="volume-medium-outline" title="Sound">
+      <View style={styles.settingStack}>
+        <SoundSettingRow
+          description="Gentle taps and card reveal sounds."
+          label="Sound effects"
+          onValueChange={setEffectsEnabled}
+          value={effectsEnabled}
+        />
+        <SoundSettingRow
+          description="A quiet mystical nature loop while enabled."
+          label="Mystical ambient sound"
+          onValueChange={setAmbientEnabled}
+          value={ambientEnabled}
+        />
+        <View style={styles.volumeBlock}>
+          <Text style={styles.settingLabel}>Volume</Text>
+          <View style={styles.volumeOptions}>
+            {volumeOptions.map((option) => {
+              const selected = option.value === volume;
+
+              return (
+                <Pressable
+                  accessibilityRole="button"
+                  disabled={volumeDisabled}
+                  key={option.value}
+                  onPress={() => setVolume(option.value)}
+                  style={[
+                    styles.volumeOption,
+                    selected && styles.volumeOptionSelected,
+                    volumeDisabled && styles.volumeOptionDisabled,
+                  ]}
+                >
+                  <Text
+                    style={[
+                      styles.volumeOptionText,
+                      selected && styles.volumeOptionTextSelected,
+                    ]}
+                  >
+                    {option.label}
+                  </Text>
+                </Pressable>
+              );
+            })}
+          </View>
+        </View>
+      </View>
+    </CelestialCard>
+  );
+}
+
+function SoundSettingRow({
+  description,
+  label,
+  onValueChange,
+  value,
+}: {
+  description: string;
+  label: string;
+  onValueChange: (value: boolean) => void;
+  value: boolean;
+}) {
+  return (
+    <View style={styles.settingRow}>
+      <View style={styles.settingText}>
+        <Text style={styles.settingLabel}>{label}</Text>
+        <Text style={styles.settingDescription}>{description}</Text>
+      </View>
+      <Switch
+        ios_backgroundColor="rgba(255, 255, 255, 0.16)"
+        onValueChange={onValueChange}
+        thumbColor={value ? colors.accent.gold : colors.text.secondary}
+        trackColor={{
+          false: 'rgba(255, 255, 255, 0.16)',
+          true: 'rgba(246, 199, 106, 0.36)',
+        }}
+        value={value}
+      />
+    </View>
   );
 }
 
@@ -876,6 +1036,30 @@ const styles = StyleSheet.create({
   cardTitleBlock: {
     flex: 1,
     gap: 4,
+  },
+  cardAction: {
+    marginTop: spacing.lg,
+  },
+  dailySummaryCard: {
+    borderColor: 'rgba(255, 211, 110, 0.34)',
+    borderRadius: 22,
+    borderWidth: 1,
+    overflow: 'hidden',
+  },
+  dailySummaryCopy: {
+    gap: spacing.sm,
+  },
+  dailySummaryOverlay: {
+    flex: 1,
+    gap: spacing.xl,
+    justifyContent: 'space-between',
+    minHeight: 340,
+    padding: spacing.xl,
+  },
+  dailySummaryTop: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
   },
   energyAction: {
     ...typography.caption,
@@ -940,41 +1124,11 @@ const styles = StyleSheet.create({
   exploreContent: {
     gap: spacing.xl,
   },
-  exploreDestination: {
-    alignItems: 'center',
-    backgroundColor: 'rgba(10, 8, 31, 0.72)',
-    borderColor: 'rgba(255, 211, 110, 0.16)',
-    borderRadius: 18,
-    borderWidth: 1,
-    flexDirection: 'row',
-    gap: spacing.sm,
-    minHeight: 58,
-    padding: spacing.sm,
-  },
-  exploreIcon: {
-    alignItems: 'center',
-    backgroundColor: 'rgba(255, 211, 110, 0.1)',
-    borderColor: 'rgba(255, 211, 110, 0.2)',
-    borderRadius: 999,
-    borderWidth: 1,
-    height: 40,
-    justifyContent: 'center',
-    width: 40,
-  },
-  exploreLabel: {
-    ...typography.button,
-    color: colors.text.primary,
-    flex: 1,
-  },
-  exploreList: {
-    gap: spacing.sm,
-  },
   featureBody: {
     color: colors.text.secondary,
     fontSize: 17,
     lineHeight: 24,
-    maxWidth: 244,
-    textAlign: 'center',
+    maxWidth: 292,
   },
   featureCard: {
     borderColor: 'rgba(255, 211, 110, 0.34)',
@@ -1002,19 +1156,20 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     height: 50,
     justifyContent: 'center',
-    position: 'absolute',
-    top: spacing.lg,
     width: 50,
   },
   featureTitle: {
     color: colors.text.primary,
     fontFamily: 'CormorantGaramond_700Bold',
-    fontSize: 34,
-    lineHeight: 40,
-    textAlign: 'center',
+    fontSize: 33,
+    lineHeight: 38,
   },
-  homeBell: {
+  homeMark: {
     alignItems: 'center',
+    backgroundColor: 'rgba(6, 5, 24, 0.62)',
+    borderColor: 'rgba(255, 211, 110, 0.24)',
+    borderRadius: 999,
+    borderWidth: 1,
     height: 44,
     justifyContent: 'center',
     width: 44,
@@ -1027,6 +1182,26 @@ const styles = StyleSheet.create({
     ...typography.bodySmall,
     color: colors.text.secondary,
     marginTop: 3,
+    maxWidth: 280,
+  },
+  homeSection: {
+    gap: spacing.md,
+  },
+  homeSmallShortcut: {
+    alignItems: 'center',
+    backgroundColor: 'rgba(10, 8, 31, 0.66)',
+    borderColor: 'rgba(255, 211, 110, 0.14)',
+    borderRadius: 16,
+    borderWidth: 1,
+    flex: 1,
+    flexDirection: 'row',
+    gap: spacing.sm,
+    minHeight: 54,
+    paddingHorizontal: spacing.md,
+  },
+  homeSmallShortcutText: {
+    ...typography.button,
+    color: colors.text.primary,
   },
   homeTitle: {
     color: colors.text.primary,
@@ -1039,6 +1214,35 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     gap: spacing.md,
     justifyContent: 'space-between',
+  },
+  homeToolCard: {
+    backgroundColor: 'rgba(10, 8, 31, 0.72)',
+    borderColor: 'rgba(255, 211, 110, 0.14)',
+    borderRadius: 18,
+    borderWidth: 1,
+    flexBasis: '47%',
+    flexGrow: 1,
+    gap: spacing.sm,
+    minHeight: 154,
+    padding: spacing.md,
+  },
+  homeToolDescription: {
+    ...typography.bodySmall,
+    color: colors.text.secondary,
+  },
+  homeToolIcon: {
+    alignItems: 'center',
+    backgroundColor: 'rgba(255, 211, 110, 0.1)',
+    borderColor: 'rgba(255, 211, 110, 0.2)',
+    borderRadius: 999,
+    borderWidth: 1,
+    height: 38,
+    justifyContent: 'center',
+    width: 38,
+  },
+  homeToolTitle: {
+    ...typography.button,
+    color: colors.text.primary,
   },
   optionGrid: {
     alignItems: 'flex-start',
@@ -1151,6 +1355,71 @@ const styles = StyleSheet.create({
     height: 44,
     justifyContent: 'center',
     width: 44,
+  },
+  settingDescription: {
+    ...typography.bodySmall,
+    color: colors.text.secondary,
+  },
+  settingLabel: {
+    ...typography.button,
+    color: colors.text.primary,
+  },
+  settingRow: {
+    alignItems: 'center',
+    borderColor: colors.border.card,
+    borderBottomWidth: 1,
+    flexDirection: 'row',
+    gap: spacing.md,
+    justifyContent: 'space-between',
+    paddingBottom: spacing.md,
+  },
+  settingStack: {
+    gap: spacing.lg,
+  },
+  settingText: {
+    flex: 1,
+    gap: 3,
+  },
+  shortcutRow: {
+    flexDirection: 'row',
+    gap: spacing.md,
+  },
+  toolGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: spacing.md,
+  },
+  volumeBlock: {
+    gap: spacing.sm,
+  },
+  volumeOption: {
+    alignItems: 'center',
+    backgroundColor: 'rgba(255, 255, 255, 0.06)',
+    borderColor: 'rgba(255, 255, 255, 0.1)',
+    borderRadius: 999,
+    borderWidth: 1,
+    flex: 1,
+    minHeight: 40,
+    justifyContent: 'center',
+    paddingHorizontal: spacing.sm,
+  },
+  volumeOptionDisabled: {
+    opacity: 0.48,
+  },
+  volumeOptionSelected: {
+    backgroundColor: 'rgba(246, 199, 106, 0.14)',
+    borderColor: 'rgba(246, 199, 106, 0.4)',
+  },
+  volumeOptionText: {
+    ...typography.caption,
+    color: colors.text.secondary,
+  },
+  volumeOptionTextSelected: {
+    color: colors.accent.gold,
+  },
+  volumeOptions: {
+    flexDirection: 'row',
+    gap: spacing.sm,
   },
   buttonRow: {
     flexDirection: 'row',

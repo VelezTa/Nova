@@ -20,9 +20,10 @@ import {
   CosmicGlow,
   CosmicPressable,
   CosmicSparkleDrift,
+  ScreenTransition,
 } from './cosmic-motion';
 
-import { MuteToggle, useNovaSound } from '@/sound/nova-sound';
+import { useNovaSound } from '@/sound/nova-sound';
 import {
   colors,
   gradients,
@@ -50,7 +51,9 @@ export function CosmicScreen({
   background,
 }: CosmicScreenProps) {
   const content = (
-    <View style={[styles.content, contentStyle]}>{children}</View>
+    <ScreenTransition style={[styles.content, contentStyle]}>
+      {children}
+    </ScreenTransition>
   );
 
   return (
@@ -68,9 +71,6 @@ export function CosmicScreen({
         ) : (
           content
         )}
-        <View style={styles.soundControl}>
-          <MuteToggle />
-        </View>
       </SafeAreaView>
     </LinearGradient>
   );
@@ -506,12 +506,6 @@ const styles = StyleSheet.create({
   },
   safeArea: {
     flex: 1,
-  },
-  soundControl: {
-    left: spacing.lg,
-    position: 'absolute',
-    top: spacing.lg,
-    zIndex: 4,
   },
   scrollContent: {
     flexGrow: 1,

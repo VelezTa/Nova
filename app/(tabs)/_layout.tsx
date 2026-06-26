@@ -1,9 +1,8 @@
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { Tabs } from 'expo-router';
 import type { ComponentProps } from 'react';
-import { StyleSheet, View, type ColorValue } from 'react-native';
+import { type ColorValue } from 'react-native';
 
-import { CosmicGlow } from '@/components';
 import { colors, radii, spacing, typography } from '@/theme';
 
 type TabIconName = ComponentProps<typeof Ionicons>['name'];
@@ -27,17 +26,19 @@ function tabIcon(name: TabIconName, focusedName: TabIconName = name) {
 }
 
 function novaTabIcon() {
-  return function NovaTabIcon({ focused }: { focused: boolean }) {
+  return function NovaTabIcon({
+    color,
+    focused,
+  }: {
+    color: ColorValue;
+    focused: boolean;
+  }) {
     return (
-      <CosmicGlow intensity={focused ? 'strong' : 'soft'}>
-        <View style={[styles.novaIcon, focused && styles.novaIconFocused]}>
-          <Ionicons
-            color={colors.accent.gold}
-            name={focused ? 'sparkles' : 'sparkles-outline'}
-            size={31}
-          />
-        </View>
-      </CosmicGlow>
+      <Ionicons
+        color={focused ? colors.accent.gold : (color as string)}
+        name={focused ? 'sparkles' : 'sparkles-outline'}
+        size={focused ? 28 : 24}
+      />
     );
   };
 }
@@ -46,6 +47,7 @@ export default function TabsLayout() {
   return (
     <Tabs
       screenOptions={{
+        animation: 'fade',
         headerShown: false,
         tabBarActiveTintColor: colors.accent.gold,
         tabBarInactiveTintColor: colors.text.muted,
@@ -73,13 +75,6 @@ export default function TabsLayout() {
         }}
       />
       <Tabs.Screen
-        name="explore"
-        options={{
-          tabBarIcon: tabIcon('compass-outline', 'compass'),
-          title: 'Explore',
-        }}
-      />
-      <Tabs.Screen
         name="chat"
         options={{
           tabBarIcon: novaTabIcon(),
@@ -94,10 +89,16 @@ export default function TabsLayout() {
         }}
       />
       <Tabs.Screen
+        name="settings"
+        options={{
+          tabBarIcon: tabIcon('settings-outline', 'settings'),
+          title: 'Settings',
+        }}
+      />
+      <Tabs.Screen
         name="profile"
         options={{
-          tabBarIcon: tabIcon('person-circle-outline', 'person-circle'),
-          title: 'Profile',
+          href: null,
         }}
       />
       <Tabs.Screen
@@ -115,21 +116,3 @@ export default function TabsLayout() {
     </Tabs>
   );
 }
-
-const styles = StyleSheet.create({
-  novaIcon: {
-    alignItems: 'center',
-    backgroundColor: 'rgba(55, 28, 96, 0.78)',
-    borderColor: 'rgba(255, 211, 110, 0.32)',
-    borderRadius: 999,
-    borderWidth: 1,
-    height: 58,
-    justifyContent: 'center',
-    marginTop: -12,
-    width: 58,
-  },
-  novaIconFocused: {
-    backgroundColor: 'rgba(100, 48, 160, 0.82)',
-    borderColor: 'rgba(255, 211, 110, 0.48)',
-  },
-});
