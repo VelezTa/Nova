@@ -30,22 +30,22 @@ type RouteTarget = string;
 type CosmicScreenProps = PropsWithChildren<{
   scroll?: boolean;
   contentStyle?: StyleProp<ViewStyle>;
+  background?: ReactNode;
 }>;
 
 export function CosmicScreen({
   children,
   scroll = true,
   contentStyle,
+  background,
 }: CosmicScreenProps) {
   const content = (
-    <View style={[styles.content, contentStyle]}>
-      <StarField />
-      {children}
-    </View>
+    <View style={[styles.content, contentStyle]}>{children}</View>
   );
 
   return (
     <LinearGradient colors={gradients.screen} style={styles.screen}>
+      {background ?? <StarField />}
       <SafeAreaView style={styles.safeArea}>
         {scroll ? (
           <ScrollView
