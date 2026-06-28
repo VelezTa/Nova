@@ -1,3 +1,3 @@
-import { WeeklyScreen } from '@/components/phase3-screens';
+import { WeeklyPredictionScreen } from '@/features/weekly-prediction';
 
-export default WeeklyScreen;
+export default WeeklyPredictionScreen;

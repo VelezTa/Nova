@@ -135,3 +135,13 @@ Phase 4 is limited to Supabase Auth, sign up, sign in, sign out, session persist
 - Status: Approved
 
 Phase 5 is limited to the Daily Card screen, daily card persistence, saved daily card history, a safe entitlement abstraction that defaults to Free, and server-side daily card generation through Supabase Edge Functions. It must not implement weekly predictions, AI chat, palm reading, compatibility, notifications, RevenueCat purchases, real billing, or production paywall checkout.
+
+## Decision 17
+
+- Date: 2026-06-28
+- Decision: Start Phase 6 Weekly Prediction using the approved Phase 1 documentation, current main branch, and Phase 5 Daily Card implementation as the source of truth.
+- Reason: The user explicitly approved Phase 6 implementation for authenticated, cached, personalized weekly predictions with saved history, safe AI generation through Supabase Edge Functions, and free/paid preview rules.
+- Alternatives considered: Keep the Weekly Prediction as a static placeholder, implement direct client-side AI calls, or bundle RevenueCat purchases into this phase.
+- Status: Approved
+
+Phase 6 is limited to the Weekly Prediction screen, weekly prediction persistence, saved weekly history, the existing safe entitlement abstraction that defaults to Free, and server-side weekly prediction generation through Supabase Edge Functions. It must not implement AI chat, palm reading, compatibility, notifications, RevenueCat purchases, real billing, or production paywall checkout.
