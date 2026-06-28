@@ -445,13 +445,17 @@ export function LoadingStateCard({
 }
 
 type ShareCardPreviewProps = {
+  colorName?: string;
   title?: string;
   message?: string;
+  numberOfDay?: number;
 };
 
 export function ShareCardPreview({
+  colorName = 'Gold',
   title = 'Clarity',
   message = 'Today invites you to slow down, listen closely, and choose what feels peaceful.',
+  numberOfDay = 7,
 }: ShareCardPreviewProps) {
   return (
     <CosmicEntrance>
@@ -465,11 +469,11 @@ export function ShareCardPreview({
           <View style={styles.shareMetaRow}>
             <View>
               <Text style={styles.shareMetaLabel}>Color</Text>
-              <Text style={styles.shareMetaValue}>Gold</Text>
+              <Text style={styles.shareMetaValue}>{colorName}</Text>
             </View>
             <View>
               <Text style={styles.shareMetaLabel}>Number</Text>
-              <Text style={styles.shareMetaValue}>7</Text>
+              <Text style={styles.shareMetaValue}>{numberOfDay}</Text>
             </View>
           </View>
         </LinearGradient>

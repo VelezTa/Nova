@@ -1,3 +1,3 @@
-import { DailyScreen } from '@/components/phase3-screens';
+import { DailyCardScreen } from '@/features/daily-card';
 
-export default DailyScreen;
+export default DailyCardScreen;

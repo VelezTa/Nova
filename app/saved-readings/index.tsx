@@ -1,3 +1,3 @@
-import { SavedReadingsScreen } from '@/components/phase3-screens';
+import { SavedDailyCardsScreen } from '@/features/daily-card';
 
-export default SavedReadingsScreen;
+export default SavedDailyCardsScreen;

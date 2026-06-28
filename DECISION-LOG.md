@@ -125,3 +125,13 @@ Phase 3 is limited to design tokens, reusable base UI components, Expo Router na
 - Status: Approved
 
 Phase 4 is limited to Supabase Auth, sign up, sign in, sign out, session persistence, onboarding, cosmic profile validation, and profile/birth profile persistence with RLS. It must not implement AI calls, payments, subscriptions, RevenueCat integration, notifications, palm upload, camera, image picker, image analysis, analytics, real paywall behavior, or premium features.
+
+## Decision 16
+
+- Date: 2026-06-28
+- Decision: Start Phase 5 Daily Card using the approved Phase 1 documentation and current main branch as the source of truth.
+- Reason: The user explicitly approved Phase 5 implementation for authenticated, cached, personalized daily cards with saved history, safe AI generation through Supabase Edge Functions, and free/paid preview rules.
+- Alternatives considered: Keep the Daily Card as a static placeholder, implement direct client-side AI calls, or bundle RevenueCat purchases into this phase.
+- Status: Approved
+
+Phase 5 is limited to the Daily Card screen, daily card persistence, saved daily card history, a safe entitlement abstraction that defaults to Free, and server-side daily card generation through Supabase Edge Functions. It must not implement weekly predictions, AI chat, palm reading, compatibility, notifications, RevenueCat purchases, real billing, or production paywall checkout.

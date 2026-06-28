@@ -32,6 +32,10 @@ import {
   StaticField,
 } from '@/components';
 import { useAuth } from '@/features/auth/auth-context';
+import {
+  DailyCardHistoryPreview,
+  DailyCardHomeSummary,
+} from '@/features/daily-card';
 import { useNovaSound, type NovaSoundVolume } from '@/sound/nova-sound';
 import { colors, spacing, typography } from '@/theme';
 
@@ -167,32 +171,7 @@ export function HomeScreen() {
 
       <View style={styles.dailySummaryCard}>
         <HomeFeatureCardBackground>
-          <View style={styles.dailySummaryOverlay}>
-            <View style={styles.dailySummaryTop}>
-              <View style={styles.featureIcon}>
-                <Ionicons
-                  name="sunny-outline"
-                  color={colors.accent.gold}
-                  size={23}
-                />
-              </View>
-              <Badge icon="sparkles-outline" tone="gold">
-                Daily energy
-              </Badge>
-            </View>
-            <View style={styles.dailySummaryCopy}>
-              <Text style={styles.featureTitle}>Clarity arrives gently</Text>
-              <Text style={styles.featureBody}>
-                Today may support one calm choice and a little more trust in
-                your timing.
-              </Text>
-            </View>
-            <AppButton
-              href="/daily"
-              label="View daily energy"
-              variant="secondary"
-            />
-          </View>
+          <DailyCardHomeSummary />
         </HomeFeatureCardBackground>
       </View>
 
@@ -742,7 +721,6 @@ export function ProfileScreen() {
         icon="person-circle-outline"
         title="Profile"
       />
-      <PlaceholderNotice />
       <CelestialCard icon="moon-outline" title={profile?.name ?? 'Profile'}>
         <Text style={styles.body}>
           Your private cosmic profile is saved for reflective guidance.
@@ -757,7 +735,7 @@ export function ProfileScreen() {
           },
           {
             label: 'Saved',
-            value: 'Static saved guidance view.',
+            value: 'Private Daily Card history.',
             icon: 'bookmark-outline',
           },
           {
@@ -780,6 +758,7 @@ export function ProfileScreen() {
           variant="secondary"
         />
       </View>
+      <DailyCardHistoryPreview />
       <AppButton href="/paywall" label="View paywall target" variant="ghost" />
     </CosmicScreen>
   );
