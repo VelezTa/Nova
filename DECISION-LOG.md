@@ -145,3 +145,13 @@ Phase 5 is limited to the Daily Card screen, daily card persistence, saved daily
 - Status: Approved
 
 Phase 6 is limited to the Weekly Prediction screen, weekly prediction persistence, saved weekly history, the existing safe entitlement abstraction that defaults to Free, and server-side weekly prediction generation through Supabase Edge Functions. It must not implement AI chat, palm reading, compatibility, notifications, RevenueCat purchases, real billing, or production paywall checkout.
+
+## Decision 18
+
+- Date: 2026-06-28
+- Decision: Start Phase 7 AI Chat using the approved Phase 1 documentation, current main branch, Phase 6 Weekly Prediction implementation, and Phase 5 Daily Card Edge Function pattern as the source of truth.
+- Reason: The user explicitly approved Phase 7 implementation for a safe authenticated AI Chat experience with Supabase persistence, RLS, server-side AI generation, profile context, safe redirects, and free/paid access rules through the existing entitlement abstraction.
+- Alternatives considered: Keep AI Chat as a static placeholder, implement direct client-side AI calls, or bundle RevenueCat purchases into this phase.
+- Status: Approved
+
+Phase 7 is limited to the AI Chat screen, AI chat persistence, chat history, the existing safe entitlement abstraction that defaults to Free, and server-side AI chat generation through Supabase Edge Functions. It must not implement palm reading, compatibility, notifications, RevenueCat purchases, real billing, or production paywall checkout.

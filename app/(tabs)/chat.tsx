@@ -1,3 +1,3 @@
-import { ChatScreen } from '@/components/phase3-screens';
+import { AIChatScreen } from '@/features/ai-chat';
 
-export default ChatScreen;
+export default AIChatScreen;
