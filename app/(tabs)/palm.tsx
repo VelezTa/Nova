@@ -1,3 +1,3 @@
-import { PalmIntroScreen } from '@/components/phase3-screens';
+import { PalmIntroScreen } from '@/features/palm-reading';
 
 export default PalmIntroScreen;

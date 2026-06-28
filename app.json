@@ -16,7 +16,19 @@
       "bundler": "metro",
       "output": "static"
     },
-    "plugins": ["expo-router", "expo-font", "expo-audio", "expo-secure-store"],
+    "plugins": [
+      "expo-router",
+      "expo-font",
+      "expo-audio",
+      "expo-secure-store",
+      [
+        "expo-image-picker",
+        {
+          "cameraPermission": "Nova uses the camera so you can capture clear left and right palm photos for symbolic readings.",
+          "photosPermission": "Nova uses your photo library so you can choose left and right palm photos for symbolic readings."
+        }
+      ]
+    ],
     "experiments": {
       "typedRoutes": true
     }
