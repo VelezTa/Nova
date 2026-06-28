@@ -1,3 +1,3 @@
-import { BirthDateScreen } from '@/components/phase3-screens';
+import { OnboardingBirthDateScreen } from '@/features/onboarding/onboarding-screens';
 
-export default BirthDateScreen;
+export default OnboardingBirthDateScreen;

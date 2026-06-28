@@ -31,6 +31,7 @@ import {
   ShareCardPreview,
   StaticField,
 } from '@/components';
+import { useAuth } from '@/features/auth/auth-context';
 import { useNovaSound, type NovaSoundVolume } from '@/sound/nova-sound';
 import { colors, spacing, typography } from '@/theme';
 
@@ -77,10 +78,10 @@ export function CosmicProfilePreviewScreen() {
       </View>
 
       <View style={styles.referenceHeader}>
-        <Text style={styles.referenceEyebrow}>Good evening, Erika ✨</Text>
+        <Text style={styles.referenceEyebrow}>Good evening, Erika</Text>
         <Text style={styles.referenceTitle}>Your cosmic profile</Text>
         <Text style={styles.referenceBody}>
-          A symbolic vision of your energy and patterns.
+          A symbolic view of your energy and patterns.
         </Text>
       </View>
 
@@ -134,12 +135,15 @@ export function CosmicProfilePreviewScreen() {
         </View>
       </View>
 
-      <AppButton href="/home" label="Open my daily guide ✨" />
+      <AppButton href="/home" label="Open my guide" />
     </CosmicScreen>
   );
 }
 
 export function HomeScreen() {
+  const { profile } = useAuth();
+  const displayName = profile?.name ?? 'there';
+
   return (
     <CosmicScreen
       background={<Phase3VisualBackground variant="home" />}
@@ -147,9 +151,9 @@ export function HomeScreen() {
     >
       <View style={styles.homeTopRow}>
         <View>
-          <Text style={styles.homeTitle}>Good evening, Erika ✨</Text>
+          <Text style={styles.homeTitle}>Good evening, {displayName}</Text>
           <Text style={styles.homeSubtitle}>
-            A softer daily rhythm for guidance, reflection, and clarity.
+            A calm place for daily guidance and reflection.
           </Text>
         </View>
         <View style={styles.homeMark}>
@@ -179,23 +183,26 @@ export function HomeScreen() {
             <View style={styles.dailySummaryCopy}>
               <Text style={styles.featureTitle}>Clarity arrives gently</Text>
               <Text style={styles.featureBody}>
-                Today may support one calm choice, honest reflection, and a
-                little more trust in your own timing.
+                Today may support one calm choice and a little more trust in
+                your timing.
               </Text>
             </View>
-            <AppButton href="/daily" label="Open today’s card" />
+            <AppButton
+              href="/daily"
+              label="View daily energy"
+              variant="secondary"
+            />
           </View>
         </HomeFeatureCardBackground>
       </View>
 
       <CelestialCard icon="chatbubble-ellipses-outline" title="Talk with Nova">
         <Text style={styles.body}>
-          Ask for a grounded, positive perspective when you want emotional
-          clarity or a symbolic reading.
+          Ask for a grounded, positive perspective when you want clarity.
         </Text>
         <AppButton
           href="/chat"
-          label="Start a calm chat"
+          label="Talk to Nova"
           style={styles.cardAction}
         />
       </CelestialCard>
@@ -204,37 +211,37 @@ export function HomeScreen() {
         <SectionHeader title="Cosmic tools" />
         <View style={styles.toolGrid}>
           <HomeToolCard
-            description="A symbolic preview from the lines and shape of your hand."
+            description="Symbolic signals from your hand."
             href="/palm"
             icon="hand-left-outline"
             title="Palm reading"
           />
           <HomeToolCard
-            description="Reflect on connection patterns with positive guidance."
+            description="Reflect on connection patterns."
             href="/compatibility"
             icon="heart-outline"
             title="Compatibility"
           />
           <HomeToolCard
-            description="See a calm static chart preview for future guidance."
+            description="A calm chart preview."
             href="/birth-chart"
             icon="planet-outline"
             title="Birth chart"
           />
           <HomeToolCard
-            description="Preview a softer rhythm for the days ahead."
+            description="A softer rhythm for the week."
             href="/weekly"
             icon="calendar-outline"
             title="Weekly prediction"
           />
           <HomeToolCard
-            description="Open today's symbolic energy card."
+            description="Today's symbolic card."
             href="/daily"
             icon="sunny-outline"
             title="Daily energy"
           />
           <HomeToolCard
-            description="Use gentle prompts for reflection and grounding."
+            description="Gentle prompts for grounding."
             href="/rituals"
             icon="flower-outline"
             title="Rituals"
@@ -268,24 +275,17 @@ export function JournalScreen() {
       contentStyle={styles.exploreContent}
     >
       <ScreenHeader
-        body="A static journal surface for future reflections, saved cards, and reading history."
+        body="A quiet place for future reflections and saved guidance."
         eyebrow="Journal"
         icon="journal-outline"
         title="Your reflections"
       />
       <EmptyStateCard
         actionHref="/daily"
-        actionLabel="View energy card"
-        body="Saved reflections will appear here after persistence is approved."
+        actionLabel="View daily energy"
+        body="Saved reflections and readings will appear here after persistence is approved."
         icon="bookmark-outline"
-        title="No saved reflections yet"
-      />
-      <EmptyStateCard
-        actionHref="/palm"
-        actionLabel="Open palm preview"
-        body="Future symbolic readings can be revisited from this space."
-        icon="sparkles-outline"
-        title="Reading history preview"
+        title="Nothing saved yet"
       />
     </CosmicScreen>
   );
@@ -295,15 +295,15 @@ export function BirthChartScreen() {
   return (
     <CosmicScreen background={<Phase3VisualBackground variant="home" />}>
       <ScreenHeader
-        body="A static placeholder for future symbolic birth chart guidance. No chart calculation or AI request is running here."
+        body="A static preview for future symbolic chart guidance."
         eyebrow="Cosmic tool"
         icon="planet-outline"
-        title="Birth Chart"
+        title="Birth chart"
       />
       <CelestialCard icon="sparkles-outline" title="Chart preview">
         <Text style={styles.body}>
-          Your birth chart will later offer positive, reflective guidance based
-          on approved profile details.
+          Your chart will later offer positive, reflective guidance based on
+          approved profile details.
         </Text>
       </CelestialCard>
       <SafeDisclaimerBlock />
@@ -315,10 +315,10 @@ export function RitualsScreen() {
   return (
     <CosmicScreen background={<Phase3VisualBackground variant="home" />}>
       <ScreenHeader
-        body="A static placeholder for future reflective rituals and journaling prompts."
+        body="Short prompts for calm reflection."
         eyebrow="Cosmic tool"
         icon="flower-outline"
-        title="Rituals / Reflections"
+        title="Rituals"
       />
       <InfoList
         items={[
@@ -410,7 +410,7 @@ export function DailyScreen() {
   return (
     <CosmicScreen background={<Phase3VisualBackground variant="clarity" />}>
       <ScreenHeader
-        body="A static card template for future save, share, and download work."
+        body="A symbolic card for today's energy."
         icon="sunny-outline"
         title="Daily card"
       />
@@ -429,7 +429,7 @@ export function DailyScreen() {
       />
       <View style={styles.buttonRow}>
         <AppButton disabled label="Save later" variant="secondary" />
-        <AppButton disabled label="Share later" variant="secondary" />
+        <AppButton disabled label="Share later" variant="ghost" />
       </View>
     </CosmicScreen>
   );
@@ -439,7 +439,7 @@ export function WeeklyScreen() {
   return (
     <CosmicScreen background={<Phase3VisualBackground variant="birthTime" />}>
       <ScreenHeader
-        body="A calm weekly ritual preview using static safe content."
+        body="A calm preview for the days ahead."
         icon="calendar-outline"
         title="Weekly prediction"
       />
@@ -482,9 +482,9 @@ export function ChatScreen() {
   return (
     <CosmicScreen background={<Phase3VisualBackground variant="cosmic" />}>
       <ScreenHeader
-        body="A static chat shell. No AI request is sent in Phase 3."
+        body="A static chat preview for future reflective guidance."
         icon="chatbubble-ellipses-outline"
-        title="Chat with your guide"
+        title="Talk with Nova"
       />
       <PlaceholderNotice />
       <View style={styles.chatStack}>
@@ -493,16 +493,13 @@ export function ChatScreen() {
         <ChatBubble side="right" text="Give me clarity in love." />
       </View>
       <View style={styles.optionGrid}>
-        {[
-          'What should I focus on today?',
-          'Give me clarity in love',
-          'How is my energy this week?',
-          'What can I learn from this connection?',
-        ].map((prompt) => (
-          <Badge key={prompt} icon="sparkles-outline" tone="violet">
-            {prompt}
-          </Badge>
-        ))}
+        {['What should I focus on today?', 'Give me clarity in love'].map(
+          (prompt) => (
+            <Badge key={prompt} icon="sparkles-outline" tone="violet">
+              {prompt}
+            </Badge>
+          ),
+        )}
       </View>
       <StaticField
         label="Message input"
@@ -518,7 +515,7 @@ export function PalmIntroScreen() {
   return (
     <CosmicScreen background={<Phase3VisualBackground variant="birthPlace" />}>
       <ScreenHeader
-        body="A guided static entry point for symbolic palm reading."
+        body="A simple preview for future symbolic palm guidance."
         icon="hand-left-outline"
         title="Palm reading"
       />
@@ -543,7 +540,7 @@ export function PalmIntroScreen() {
         ]}
       />
       <SafeDisclaimerBlock />
-      <AppButton href="/palm-upload" label="Preview upload step" />
+      <AppButton href="/palm-upload" label="Start reading" />
     </CosmicScreen>
   );
 }
@@ -552,9 +549,9 @@ export function PalmUploadScreen() {
   return (
     <CosmicScreen background={<Phase3VisualBackground variant="name" />}>
       <ScreenHeader
-        body="Static placeholders only. No camera, image picker, or upload logic exists here."
+        body="Static placeholders only. No camera or upload logic runs here."
         icon="cloud-upload-outline"
-        title="Palm photo placeholders"
+        title="Palm photos"
       />
       <PlaceholderNotice />
       <StaticField
@@ -567,11 +564,7 @@ export function PalmUploadScreen() {
         value="Photo placeholder only"
         icon="hand-right-outline"
       />
-      <AppButton
-        href="/palm-result"
-        label="Preview symbolic result"
-        variant="secondary"
-      />
+      <AppButton href="/palm-result" label="Preview result" />
     </CosmicScreen>
   );
 }
@@ -580,9 +573,9 @@ export function PalmResultScreen() {
   return (
     <CosmicScreen background={<Phase3VisualBackground variant="safeSpace" />}>
       <ScreenHeader
-        body="A static result layout with safe symbolic sections."
+        body="A safe symbolic result preview."
         icon="sparkles-outline"
-        title="Palm result preview"
+        title="Palm result"
       />
       <PlaceholderNotice />
       <InfoList
@@ -613,15 +606,14 @@ export function CompatibilityIntroScreen() {
   return (
     <CosmicScreen background={<Phase3VisualBackground variant="safeSpace" />}>
       <ScreenHeader
-        body="A romantic, positive setup preview for two cosmic profiles."
+        body="A positive preview for two cosmic profiles."
         icon="heart-outline"
         title="Compatibility"
       />
       <PlaceholderNotice />
       <CelestialCard icon="people-outline" title="Connection preview">
         <Text style={styles.body}>
-          Create a positive compatibility reading based on two symbolic
-          profiles. This Phase 3 screen does not save or submit data.
+          Reflect on connection patterns with warm, non-deterministic guidance.
         </Text>
       </CelestialCard>
       <AppButton href="/compatibility/form" label="Preview form" />
@@ -633,7 +625,7 @@ export function CompatibilityFormScreen() {
   return (
     <CosmicScreen background={<Phase3VisualBackground variant="home" />}>
       <ScreenHeader
-        body="Static form surfaces for the future compatibility flow."
+        body="Static fields for the future compatibility flow."
         icon="people-outline"
         title="Two profile preview"
       />
@@ -648,11 +640,7 @@ export function CompatibilityFormScreen() {
         value="Mateo · September 11 · Bogota"
         icon="person-outline"
       />
-      <AppButton
-        href="/compatibility/result"
-        label="Preview result"
-        variant="secondary"
-      />
+      <AppButton href="/compatibility/result" label="Preview result" />
     </CosmicScreen>
   );
 }
@@ -661,9 +649,9 @@ export function CompatibilityResultScreen() {
   return (
     <CosmicScreen background={<Phase3VisualBackground variant="welcome" />}>
       <ScreenHeader
-        body="Static result copy stays positive, reflective, and non-deterministic."
+        body="Positive, reflective, and non-deterministic."
         icon="heart-circle-outline"
-        title="Warm Magnetic Balance"
+        title="Magnetic Balance"
       />
       <PlaceholderNotice />
       <CelestialCard
@@ -704,9 +692,9 @@ export function PaywallScreen() {
   return (
     <CosmicScreen background={<Phase3VisualBackground variant="homeFeature" />}>
       <ScreenHeader
-        body="A visual paywall target only. No purchases, entitlements, or RevenueCat calls are implemented."
+        body="Premium preview. Purchases are not active."
         icon="diamond-outline"
-        title="Unlock your full cosmic guide"
+        title="Nova Plus"
       />
       <PlaceholderNotice label="Phase 3 paywall visual target only" />
       <CelestialCard
@@ -734,49 +722,63 @@ export function PaywallScreen() {
           ]}
         />
       </CelestialCard>
-      <AppButton disabled label="Purchases are disabled in Phase 3" />
+      <AppButton
+        disabled
+        label="Purchases disabled in preview"
+        variant="secondary"
+      />
       <AppButton disabled label="Restore purchases later" variant="ghost" />
     </CosmicScreen>
   );
 }
 
 export function ProfileScreen() {
+  const { profile } = useAuth();
+
   return (
     <CosmicScreen background={<Phase3VisualBackground variant="cosmic" />}>
       <ScreenHeader
-        body="My Space preview for saved guidance, settings, and future subscription state."
+        body="Your profile, saved guidance, and quiet preferences."
         icon="person-circle-outline"
-        title="My Space"
+        title="Profile"
       />
       <PlaceholderNotice />
-      <CelestialCard icon="moon-outline" title="Erika">
+      <CelestialCard icon="moon-outline" title={profile?.name ?? 'Profile'}>
         <Text style={styles.body}>
-          Your saved guidance and preferences will appear here after later
-          phases are approved.
+          Your private cosmic profile is saved for reflective guidance.
         </Text>
       </CelestialCard>
       <InfoList
         items={[
           {
-            label: 'Saved readings',
-            value: 'Open static saved view.',
+            label: 'Main interest',
+            value: profile?.mainInterest ?? 'Not set',
+            icon: 'sparkles-outline',
+          },
+          {
+            label: 'Saved',
+            value: 'Static saved guidance view.',
             icon: 'bookmark-outline',
           },
           {
             label: 'Settings',
-            value: 'Open static settings view.',
+            value: 'Sound and account preferences.',
             icon: 'settings-outline',
           },
           {
-            label: 'Paywall',
-            value: 'Open visual paywall target.',
+            label: 'Nova Plus',
+            value: 'Visual paywall target.',
             icon: 'diamond-outline',
           },
         ]}
       />
       <View style={styles.buttonRow}>
-        <AppButton href="/saved-readings" label="Saved" variant="secondary" />
-        <AppButton href="/settings" label="Settings" variant="secondary" />
+        <AppButton href="/settings" label="Open settings" />
+        <AppButton
+          href="/saved-readings"
+          label="Saved readings"
+          variant="secondary"
+        />
       </View>
       <AppButton href="/paywall" label="View paywall target" variant="ghost" />
     </CosmicScreen>
@@ -787,30 +789,25 @@ export function SavedReadingsScreen() {
   return (
     <CosmicScreen background={<Phase3VisualBackground variant="home" />}>
       <ScreenHeader
-        body="Static empty states for saved daily cards, palm readings, and compatibility readings."
+        body="A future home for saved readings."
         icon="bookmark-outline"
         title="Saved readings"
       />
       <PlaceholderNotice />
       <EmptyStateCard
         actionHref="/daily"
-        actionLabel="View today's card"
-        body="Save daily cards, readings, and insights you want to revisit after persistence is approved."
+        actionLabel="View daily energy"
+        body="Daily cards, palm readings, and compatibility notes will appear here after persistence is approved."
         icon="albums-outline"
-        title="Your saved guidance will appear here"
-      />
-      <EmptyStateCard
-        actionHref="/compatibility"
-        actionLabel="Start preview"
-        body="Create a positive compatibility reading based on two cosmic profiles later."
-        icon="heart-outline"
-        title="Connection preview"
+        title="No saved guidance yet"
       />
     </CosmicScreen>
   );
 }
 
 export function SettingsScreen() {
+  const { signOut } = useAuth();
+
   return (
     <CosmicScreen background={<Phase3VisualBackground variant="birthDate" />}>
       <ScreenHeader
@@ -849,6 +846,13 @@ export function SettingsScreen() {
             icon: 'diamond-outline',
           },
         ]}
+      />
+      <AppButton
+        label="Sign out"
+        onPress={() => {
+          void signOut();
+        }}
+        variant="secondary"
       />
     </CosmicScreen>
   );
@@ -1038,7 +1042,7 @@ const styles = StyleSheet.create({
     gap: 4,
   },
   cardAction: {
-    marginTop: spacing.lg,
+    marginTop: spacing.md,
   },
   dailySummaryCard: {
     borderColor: 'rgba(255, 211, 110, 0.34)',
@@ -1051,10 +1055,10 @@ const styles = StyleSheet.create({
   },
   dailySummaryOverlay: {
     flex: 1,
-    gap: spacing.xl,
+    gap: spacing.lg,
     justifyContent: 'space-between',
-    minHeight: 340,
-    padding: spacing.xl,
+    minHeight: 268,
+    padding: spacing.lg,
   },
   dailySummaryTop: {
     alignItems: 'center',
@@ -1094,9 +1098,9 @@ const styles = StyleSheet.create({
     borderColor: 'rgba(167, 139, 250, 0.22)',
     borderRadius: 999,
     borderWidth: 1,
-    height: 46,
+    height: 40,
     justifyContent: 'center',
-    width: 46,
+    width: 40,
   },
   energyLabel: {
     ...typography.caption,
@@ -1105,7 +1109,7 @@ const styles = StyleSheet.create({
   energyPanel: {
     backgroundColor: 'rgba(6, 5, 24, 0.62)',
     borderColor: 'rgba(255, 211, 110, 0.18)',
-    borderRadius: 18,
+    borderRadius: 16,
     borderWidth: 1,
     gap: spacing.md,
     padding: spacing.md,
@@ -1122,13 +1126,13 @@ const styles = StyleSheet.create({
     lineHeight: 22,
   },
   exploreContent: {
-    gap: spacing.xl,
+    gap: spacing['2xl'],
   },
   featureBody: {
     color: colors.text.secondary,
-    fontSize: 17,
-    lineHeight: 24,
-    maxWidth: 292,
+    fontSize: 15,
+    lineHeight: 22,
+    maxWidth: 300,
   },
   featureCard: {
     borderColor: 'rgba(255, 211, 110, 0.34)',
@@ -1154,15 +1158,15 @@ const styles = StyleSheet.create({
     borderColor: 'rgba(255, 211, 110, 0.28)',
     borderRadius: 999,
     borderWidth: 1,
-    height: 50,
+    height: 42,
     justifyContent: 'center',
-    width: 50,
+    width: 42,
   },
   featureTitle: {
     color: colors.text.primary,
     fontFamily: 'CormorantGaramond_700Bold',
-    fontSize: 33,
-    lineHeight: 38,
+    fontSize: 29,
+    lineHeight: 34,
   },
   homeMark: {
     alignItems: 'center',
@@ -1175,28 +1179,28 @@ const styles = StyleSheet.create({
     width: 44,
   },
   homeContent: {
-    gap: spacing.xl,
-    paddingTop: spacing.xl,
+    gap: spacing['2xl'],
+    paddingTop: spacing.lg,
   },
   homeSubtitle: {
     ...typography.bodySmall,
     color: colors.text.secondary,
     marginTop: 3,
-    maxWidth: 280,
+    maxWidth: 300,
   },
   homeSection: {
-    gap: spacing.md,
+    gap: spacing.sm,
   },
   homeSmallShortcut: {
     alignItems: 'center',
     backgroundColor: 'rgba(10, 8, 31, 0.66)',
     borderColor: 'rgba(255, 211, 110, 0.14)',
-    borderRadius: 16,
+    borderRadius: 14,
     borderWidth: 1,
     flex: 1,
     flexDirection: 'row',
     gap: spacing.sm,
-    minHeight: 54,
+    minHeight: 50,
     paddingHorizontal: spacing.md,
   },
   homeSmallShortcutText: {
@@ -1206,8 +1210,8 @@ const styles = StyleSheet.create({
   homeTitle: {
     color: colors.text.primary,
     fontFamily: 'CormorantGaramond_700Bold',
-    fontSize: 26,
-    lineHeight: 31,
+    fontSize: 28,
+    lineHeight: 32,
   },
   homeTopRow: {
     alignItems: 'flex-start',
@@ -1218,12 +1222,12 @@ const styles = StyleSheet.create({
   homeToolCard: {
     backgroundColor: 'rgba(10, 8, 31, 0.72)',
     borderColor: 'rgba(255, 211, 110, 0.14)',
-    borderRadius: 18,
+    borderRadius: 16,
     borderWidth: 1,
     flexBasis: '47%',
     flexGrow: 1,
-    gap: spacing.sm,
-    minHeight: 154,
+    gap: spacing.xs,
+    minHeight: 128,
     padding: spacing.md,
   },
   homeToolDescription: {
@@ -1236,9 +1240,9 @@ const styles = StyleSheet.create({
     borderColor: 'rgba(255, 211, 110, 0.2)',
     borderRadius: 999,
     borderWidth: 1,
-    height: 38,
+    height: 34,
     justifyContent: 'center',
-    width: 38,
+    width: 34,
   },
   homeToolTitle: {
     ...typography.button,
@@ -1248,10 +1252,10 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: spacing.sm,
+    gap: spacing.xs,
   },
   profileImageSpacer: {
-    minHeight: 126,
+    minHeight: 96,
   },
   referenceBody: {
     color: colors.text.secondary,
@@ -1262,7 +1266,7 @@ const styles = StyleSheet.create({
   referenceCard: {
     backgroundColor: 'rgba(8, 6, 28, 0.72)',
     borderColor: 'rgba(255, 211, 110, 0.34)',
-    borderRadius: 18,
+    borderRadius: 16,
     borderWidth: 1,
     gap: spacing.sm,
     padding: spacing.md,
@@ -1324,8 +1328,8 @@ const styles = StyleSheet.create({
   referenceTitle: {
     color: colors.text.primary,
     fontFamily: 'CormorantGaramond_700Bold',
-    fontSize: 39,
-    lineHeight: 43,
+    fontSize: 36,
+    lineHeight: 40,
   },
   referenceTopBar: {
     alignItems: 'center',
@@ -1333,7 +1337,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   resultContent: {
-    gap: spacing.sm,
+    gap: spacing.md,
     paddingTop: spacing.lg,
   },
   roundIconButton: {
@@ -1371,6 +1375,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     gap: spacing.md,
     justifyContent: 'space-between',
+    minHeight: 58,
     paddingBottom: spacing.md,
   },
   settingStack: {
@@ -1382,7 +1387,7 @@ const styles = StyleSheet.create({
   },
   shortcutRow: {
     flexDirection: 'row',
-    gap: spacing.md,
+    gap: spacing.sm,
   },
   toolGrid: {
     flexDirection: 'row',
@@ -1422,9 +1427,7 @@ const styles = StyleSheet.create({
     gap: spacing.sm,
   },
   buttonRow: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: spacing.md,
+    gap: spacing.sm,
   },
   chatStack: {
     gap: spacing.md,

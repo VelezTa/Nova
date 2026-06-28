@@ -45,23 +45,23 @@ type Choice = {
 };
 
 export const onboardingTokens = {
-  screenPadding: 28,
+  screenPadding: 24,
   topSafeAreaSpacing: 20,
   labelSpacing: 8,
-  titleFontSize: 31,
-  titleLineHeight: 35,
+  titleFontSize: 30,
+  titleLineHeight: 34,
   subtitleFontSize: 13,
-  subtitleLineHeight: 19,
+  subtitleLineHeight: 18,
   cardWidth: '100%',
   cardMinHeight: 82,
   cardBorderRadius: 16,
   cardBorderColor: 'rgba(255, 205, 108, 0.34)',
   cardBackgroundOpacity: 0.82,
-  inputHeight: 86,
-  chipHeight: 38,
-  radioRowHeight: 48,
-  ctaHeight: 52,
-  ctaBottomSpacing: 9,
+  inputHeight: 76,
+  chipHeight: 42,
+  radioRowHeight: 46,
+  ctaHeight: 50,
+  ctaBottomSpacing: 16,
   goldTextColor: '#FFD36E',
   creamTextColor: '#FFF1C8',
   mutedTextColor: '#D3C6F5',
@@ -92,14 +92,14 @@ const colors = {
 } as const;
 
 const setupCopy = {
-  notice: 'Phase 3 setup-only placeholder',
-  eyebrow: 'PHASE 3 SETUP',
+  notice: 'Static preview',
+  eyebrow: 'ONBOARDING',
 } as const;
 
 export function RealNameScreen() {
   return (
     <SetupScreen
-      body="This screen will collect a preferred name later. For now it previews the visual style only."
+      body="Preview how Nova will personalize your guidance."
       fields={[{ icon: 'person-outline', label: 'Name', value: 'Erika' }]}
       nextHref="/birth-date"
       title="What should Nova call you?"
@@ -111,7 +111,7 @@ export function RealNameScreen() {
 export function RealBirthDateScreen() {
   return (
     <SetupScreen
-      body="Birth details will support symbolic personalization after onboarding is approved."
+      body="Birth details will support symbolic personalization later."
       fields={[
         {
           icon: 'calendar-outline',
@@ -129,7 +129,7 @@ export function RealBirthDateScreen() {
 export function RealBirthTimeScreen() {
   return (
     <SetupScreen
-      body="Nova will support exact, approximate, and unknown birth time paths in a later phase."
+      body="Exact, approximate, and unknown time paths are previewed here."
       nextHref="/birth-place"
       radioOptions={[
         { icon: 'ellipse-outline', label: 'Exact time' },
@@ -145,7 +145,7 @@ export function RealBirthTimeScreen() {
 export function RealBirthPlaceScreen() {
   return (
     <SetupScreen
-      body="Location fields are static here and are not connected to storage or geocoding."
+      body="Location fields are static in this preview."
       fields={[
         { icon: 'location-outline', label: 'City', value: 'San Juan' },
         { icon: 'globe-outline', label: 'Country', value: 'Puerto Rico' },
@@ -160,7 +160,7 @@ export function RealBirthPlaceScreen() {
 export function RealInterestScreen() {
   return (
     <SetupScreen
-      body="These preview chips match the approved guidance themes without saving a selection."
+      body="Choose the themes you want to explore."
       chips={[
         { icon: 'heart-outline', label: 'Love' },
         { icon: 'briefcase-outline', label: 'Career' },
@@ -227,9 +227,7 @@ function SetupScreen({
         <Text style={styles.body}>{body}</Text>
       </View>
 
-      <SetupNotice
-        compact={variant === 'birthTime' || variant === 'interest'}
-      />
+      <SetupNotice />
 
       {fields.length > 0 ? (
         <View style={styles.fieldStack}>
@@ -554,27 +552,26 @@ const styles = StyleSheet.create({
   notice: {
     alignItems: 'center',
     alignSelf: 'flex-start',
-    backgroundColor: 'rgba(16, 14, 30, 0.82)',
-    borderColor: colors.goldBorder,
+    backgroundColor: 'rgba(16, 14, 30, 0.58)',
+    borderColor: 'rgba(255, 255, 255, 0.14)',
     borderRadius: 999,
     borderWidth: 1.2,
     flexDirection: 'row',
-    gap: 9,
-    minHeight: 38,
-    paddingHorizontal: 13,
-    width: '100%',
+    gap: 7,
+    minHeight: 30,
+    paddingHorizontal: 10,
     zIndex: 1,
   },
   compactNotice: {
-    width: '72%',
+    alignSelf: 'flex-start',
   },
   noticeText: {
-    color: colors.cream,
+    color: 'rgba(255, 241, 200, 0.72)',
     flex: 1,
     fontFamily: fonts.bodyExtraBold,
-    fontSize: 12,
+    fontSize: 11,
     letterSpacing: 0,
-    lineHeight: 15,
+    lineHeight: 14,
   },
   noticeDot: {
     backgroundColor: colors.gold,
@@ -592,14 +589,14 @@ const styles = StyleSheet.create({
     borderRadius: onboardingTokens.cardBorderRadius,
     borderWidth: 1,
     minHeight: onboardingTokens.inputHeight,
-    paddingHorizontal: 15,
-    paddingVertical: 14,
+    paddingHorizontal: 14,
+    paddingVertical: 12,
     width: onboardingTokens.cardWidth,
   },
   inputLabelRow: {
     alignItems: 'center',
     flexDirection: 'row',
-    gap: 9,
+    gap: 8,
   },
   inputLabel: {
     color: 'rgba(229, 218, 255, 0.76)',
@@ -611,10 +608,10 @@ const styles = StyleSheet.create({
   textInput: {
     color: colors.cream,
     fontFamily: fonts.bodyBold,
-    fontSize: 18,
+    fontSize: 17,
     letterSpacing: 0,
-    lineHeight: 26,
-    marginTop: 7,
+    lineHeight: 24,
+    marginTop: 5,
     padding: 0,
   },
   radioStack: {
@@ -628,7 +625,7 @@ const styles = StyleSheet.create({
     borderRadius: 999,
     borderWidth: 1,
     flexDirection: 'row',
-    gap: 11,
+    gap: 10,
     height: onboardingTokens.radioRowHeight,
     paddingHorizontal: 15,
   },
@@ -650,19 +647,19 @@ const styles = StyleSheet.create({
   chipGrid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: 8,
+    gap: 9,
     zIndex: 1,
   },
   chip: {
     alignItems: 'center',
     backgroundColor: 'rgba(37, 17, 55, 0.82)',
     borderColor: 'rgba(205, 103, 255, 0.42)',
-    borderRadius: 13,
+    borderRadius: 14,
     borderWidth: 1,
     flexDirection: 'row',
-    gap: 7,
-    height: onboardingTokens.chipHeight,
-    paddingHorizontal: 11,
+    gap: 6,
+    minHeight: onboardingTokens.chipHeight,
+    paddingHorizontal: 10,
     width: '48.5%',
   },
   selectedChip: {
@@ -701,6 +698,7 @@ const styles = StyleSheet.create({
   bottomActions: {
     gap: 10,
     marginTop: 'auto',
+    paddingTop: 8,
     zIndex: 1,
   },
   buttonPressable: {

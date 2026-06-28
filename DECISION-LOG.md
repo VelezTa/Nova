@@ -115,3 +115,13 @@ Phase 2 is limited to Expo TypeScript scaffolding, linting and formatting setup,
 - Status: Approved
 
 Phase 3 is limited to design tokens, reusable base UI components, Expo Router navigation skeleton, setup-only static screens, and documentation alignment. It must not implement authentication, Supabase database logic, AI calls, payments, subscriptions, RevenueCat integration, notifications, palm upload, camera, image picker, image analysis, backend logic, migrations, secrets, or final production screens.
+
+## Decision 15
+
+- Date: 2026-06-27
+- Decision: Start Phase 4 Auth And Onboarding using the approved Phase 1 documentation as the source of truth.
+- Reason: The user explicitly approved Phase 4 implementation for real Supabase Auth, onboarding, cosmic profile validation, and private profile persistence with RLS after the Phase 3 shell work.
+- Alternatives considered: Stop until a separate Phase 3 completion note is recorded, or keep onboarding as static placeholders.
+- Status: Approved
+
+Phase 4 is limited to Supabase Auth, sign up, sign in, sign out, session persistence, onboarding, cosmic profile validation, and profile/birth profile persistence with RLS. It must not implement AI calls, payments, subscriptions, RevenueCat integration, notifications, palm upload, camera, image picker, image analysis, analytics, real paywall behavior, or premium features.

@@ -1,3 +1,3 @@
-import { InterestScreen } from '@/components/phase3-screens';
+import { OnboardingInterestScreen } from '@/features/onboarding/onboarding-screens';
 
-export default InterestScreen;
+export default OnboardingInterestScreen;

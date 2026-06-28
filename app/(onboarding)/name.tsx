@@ -1,3 +1,3 @@
-import { NameScreen } from '@/components/phase3-screens';
+import { OnboardingNameScreen } from '@/features/onboarding/onboarding-screens';
 
-export default NameScreen;
+export default OnboardingNameScreen;

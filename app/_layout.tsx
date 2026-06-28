@@ -11,6 +11,9 @@ import {
 } from '@expo-google-fonts/nunito-sans';
 import { Stack } from 'expo-router';
 
+import { AuthProvider } from '@/features/auth/auth-context';
+import { AuthRouteGate } from '@/features/auth/auth-gate';
+import { OnboardingDraftProvider } from '@/features/onboarding/onboarding-context';
 import { SoundProvider } from '@/sound/nova-sound';
 import { colors } from '@/theme';
 
@@ -31,14 +34,20 @@ export default function RootLayout() {
 
   return (
     <SoundProvider>
-      <Stack
-        screenOptions={{
-          animation: 'fade',
-          animationDuration: 350,
-          contentStyle: { backgroundColor: colors.background.base },
-          headerShown: false,
-        }}
-      />
+      <AuthProvider>
+        <OnboardingDraftProvider>
+          <AuthRouteGate>
+            <Stack
+              screenOptions={{
+                animation: 'fade',
+                animationDuration: 350,
+                contentStyle: { backgroundColor: colors.background.base },
+                headerShown: false,
+              }}
+            />
+          </AuthRouteGate>
+        </OnboardingDraftProvider>
+      </AuthProvider>
     </SoundProvider>
   );
 }

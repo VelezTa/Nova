@@ -1,3 +1,3 @@
-import { BirthPlaceScreen } from '@/components/phase3-screens';
+import { OnboardingBirthPlaceScreen } from '@/features/onboarding/onboarding-screens';
 
-export default BirthPlaceScreen;
+export default OnboardingBirthPlaceScreen;

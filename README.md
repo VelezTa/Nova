@@ -6,11 +6,11 @@ The product is positioned as a positive daily cosmic guide for self-knowledge, e
 
 ## Current Phase
 
-Phase 2: Project setup.
+Phase 4: Auth And Onboarding.
 
-Phase 1 documentation is approved. Phase 2 is limited to the Expo TypeScript app shell, Expo Router, base tooling, local startup instructions, and secret-free environment templates.
+Phase 1 documentation is approved. Phase 4 is limited to Supabase Auth, sign up, sign in, sign out, session persistence, onboarding, cosmic profile validation, and private profile persistence with RLS.
 
-Do not build production app features until the relevant later phase is explicitly approved. Phase 2 must not implement authentication, Supabase database logic, AI calls, payments, subscriptions, notifications, palm upload, image analysis, or final production screens.
+Do not build production app features outside the approved phase. Phase 4 must not implement AI calls, payments, subscriptions, RevenueCat integration, notifications, palm upload, camera, image analysis, analytics, real paywall behavior, or premium features.
 
 ## Planned Tech Stack
 
@@ -58,9 +58,9 @@ All generated content must be positive, reflective, non-deterministic, and emoti
 
 1. Review the documentation before implementation.
 2. Resolve any open question that directly affects the next implementation phase.
-3. Treat deferred product, pricing, analytics, branding, visual reference, and astrology-depth questions in `RESEARCH-NOTES.md` as non-blocking for Phase 2 setup unless they affect the app shell.
-4. Phase 1 documentation is approved for Phase 2 project setup.
-5. Start Phase 2 by creating the Expo TypeScript project only within the setup boundaries in `PLAN.md`.
+3. Treat deferred product, pricing, analytics, branding, visual reference, and astrology-depth questions in `RESEARCH-NOTES.md` as non-blocking unless they affect the active phase.
+4. Phase 1 documentation is approved as the source of truth for phased implementation.
+5. Build only the currently approved phase within the setup boundaries in `PLAN.md`.
 6. Build one phase at a time using `PLAN.md` and verify using `QA-CHECKLIST.md`.
 
 ## Local Development

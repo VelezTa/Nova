@@ -89,14 +89,14 @@ export default function TabsLayout() {
         }}
       />
       <Tabs.Screen
-        name="settings"
+        name="profile"
         options={{
-          tabBarIcon: tabIcon('settings-outline', 'settings'),
-          title: 'Settings',
+          tabBarIcon: tabIcon('person-circle-outline', 'person-circle'),
+          title: 'Profile',
         }}
       />
       <Tabs.Screen
-        name="profile"
+        name="settings"
         options={{
           href: null,
         }}

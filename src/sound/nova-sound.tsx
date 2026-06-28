@@ -2,6 +2,7 @@ import { useAudioPlayer, setAudioModeAsync } from 'expo-audio';
 import * as SecureStore from 'expo-secure-store';
 import type { PropsWithChildren } from 'react';
 import { createContext, useContext, useEffect, useMemo, useState } from 'react';
+import { Platform } from 'react-native';
 
 import cardOpenSound from '../../assets/audio/nova-card-open.wav';
 import natureRiverLoop from '../../assets/audio/nova-nature-river.mp3';
@@ -33,6 +34,40 @@ const volumeLevel: Record<NovaSoundVolume, number> = {
   full: 0.88,
 };
 
+type WebPreferenceStorage = {
+  getItem: (key: string) => string | null;
+  setItem: (key: string, value: string) => void;
+};
+
+function webPreferenceStorage() {
+  if (typeof globalThis === 'undefined' || !('localStorage' in globalThis)) {
+    return null;
+  }
+
+  return globalThis.localStorage as WebPreferenceStorage;
+}
+
+function readPreference(key: string) {
+  if (Platform.OS === 'web') {
+    return Promise.resolve(webPreferenceStorage()?.getItem(key) ?? null);
+  }
+
+  return SecureStore.getItemAsync(key).catch(() => null);
+}
+
+function savePreference(key: string, value: string) {
+  if (Platform.OS === 'web') {
+    webPreferenceStorage()?.setItem(key, value);
+    return Promise.resolve();
+  }
+
+  return SecureStore.setItemAsync(key, value).catch(() => undefined);
+}
+
+function playSafely(player: { play: () => unknown }) {
+  Promise.resolve(player.play()).catch(() => undefined);
+}
+
 export function SoundProvider({ children }: PropsWithChildren) {
   const ambientPlayer = useAudioPlayer(natureRiverLoop);
   const cardPlayer = useAudioPlayer(cardOpenSound);
@@ -49,10 +84,10 @@ export function SoundProvider({ children }: PropsWithChildren) {
     }).catch(() => undefined);
 
     Promise.all([
-      SecureStore.getItemAsync(ambientPreferenceKey),
-      SecureStore.getItemAsync(effectsPreferenceKey),
-      SecureStore.getItemAsync(volumePreferenceKey),
-      SecureStore.getItemAsync(legacyMutePreferenceKey),
+      readPreference(ambientPreferenceKey),
+      readPreference(effectsPreferenceKey),
+      readPreference(volumePreferenceKey),
+      readPreference(legacyMutePreferenceKey),
     ])
       .then(([storedAmbient, storedEffects, storedVolume, legacyMuted]) => {
         if (storedAmbient === 'false') {
@@ -92,25 +127,17 @@ export function SoundProvider({ children }: PropsWithChildren) {
       return;
     }
 
-    SecureStore.setItemAsync(
-      ambientPreferenceKey,
-      String(ambientEnabled),
-    ).catch(() => undefined);
-    SecureStore.setItemAsync(
-      effectsPreferenceKey,
-      String(effectsEnabled),
-    ).catch(() => undefined);
-    SecureStore.setItemAsync(volumePreferenceKey, volume).catch(
-      () => undefined,
-    );
+    savePreference(ambientPreferenceKey, String(ambientEnabled));
+    savePreference(effectsPreferenceKey, String(effectsEnabled));
+    savePreference(volumePreferenceKey, volume);
 
-    if (!ambientEnabled) {
+    if (!ambientEnabled || Platform.OS === 'web') {
       ambientPlayer.pause();
       return;
     }
 
     ambientPlayer.seekTo(0).catch(() => undefined);
-    ambientPlayer.play();
+    playSafely(ambientPlayer);
   }, [ambientEnabled, ambientPlayer, effectsEnabled, ready, volume]);
 
   const value = useMemo<SoundContextValue>(
@@ -125,7 +152,7 @@ export function SoundProvider({ children }: PropsWithChildren) {
         const player = sound === 'card' ? cardPlayer : tapPlayer;
 
         player.seekTo(0).catch(() => undefined);
-        player.play();
+        playSafely(player);
       },
       ready,
       setAmbientEnabled: setAmbientEnabledState,

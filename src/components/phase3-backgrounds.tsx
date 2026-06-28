@@ -18,7 +18,7 @@ import welcomeBackground from '../../assets/images/reference-intro-background-we
 
 import { AnimatedCosmicOverlay } from './cosmic-motion';
 
-type VisualBackgroundVariant =
+export type VisualBackgroundVariant =
   | 'birthDate'
   | 'birthPlace'
   | 'birthTime'

@@ -85,7 +85,7 @@ type HeaderProps = {
 };
 
 export function ScreenHeader({
-  eyebrow = 'Phase 3 setup',
+  eyebrow = 'Preview',
   title,
   body,
   align = 'left',
@@ -326,9 +326,7 @@ export function Badge({ children, icon, tone = 'gold', style }: BadgeProps) {
   );
 }
 
-export function PlaceholderNotice({
-  label = 'Phase 3 setup-only placeholder',
-}) {
+export function PlaceholderNotice({ label = 'Static preview' }) {
   return (
     <View style={styles.notice}>
       <Ionicons name="construct-outline" color={colors.accent.gold} size={16} />
@@ -512,10 +510,12 @@ const styles = StyleSheet.create({
   },
   content: {
     flexGrow: 1,
-    gap: spacing.xl,
+    gap: spacing['2xl'],
     marginHorizontal: 'auto',
     maxWidth: layout.maxContentWidth,
-    padding: layout.screenPadding,
+    paddingBottom: 112,
+    paddingHorizontal: layout.screenPadding,
+    paddingTop: spacing.xl,
     width: '100%',
   },
   glowOrb: {
@@ -572,6 +572,7 @@ const styles = StyleSheet.create({
   },
   header: {
     gap: spacing.sm,
+    maxWidth: 560,
   },
   centered: {
     alignItems: 'center',
@@ -582,9 +583,9 @@ const styles = StyleSheet.create({
     borderColor: colors.border.subtleGold,
     borderRadius: radii.pill,
     borderWidth: 1,
-    height: 48,
+    height: 44,
     justifyContent: 'center',
-    width: 48,
+    width: 44,
   },
   eyebrow: {
     ...typography.eyebrow,
@@ -598,6 +599,7 @@ const styles = StyleSheet.create({
   body: {
     ...typography.body,
     color: colors.text.secondary,
+    maxWidth: 520,
   },
   bodySmall: {
     ...typography.bodySmall,
@@ -612,6 +614,7 @@ const styles = StyleSheet.create({
   },
   buttonBase: {
     alignItems: 'center',
+    alignSelf: 'stretch',
     borderRadius: radii.pill,
     flexDirection: 'row',
     gap: spacing.sm,
@@ -625,7 +628,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     gap: spacing.sm,
     justifyContent: 'center',
-    minHeight: 52,
+    minHeight: 50,
     paddingHorizontal: spacing.xl,
     width: '100%',
   },
@@ -635,11 +638,13 @@ const styles = StyleSheet.create({
   },
   secondaryButton: {
     backgroundColor: colors.surface.glass,
-    borderColor: colors.border.subtleGold,
+    borderColor: colors.border.card,
     borderWidth: 1,
-    paddingHorizontal: spacing.xl,
+    minHeight: 44,
+    paddingHorizontal: spacing.lg,
   },
   ghostButton: {
+    minHeight: 42,
     paddingHorizontal: spacing.lg,
   },
   secondaryButtonText: {
@@ -654,9 +659,9 @@ const styles = StyleSheet.create({
   },
   card: {
     borderColor: colors.border.card,
-    borderRadius: radii.lg,
+    borderRadius: radii.md,
     borderWidth: 1,
-    gap: spacing.lg,
+    gap: spacing.md,
     overflow: 'hidden',
     padding: spacing.lg,
     ...shadows.card,
@@ -687,9 +692,9 @@ const styles = StyleSheet.create({
     borderColor: colors.border.subtleGold,
     borderRadius: radii.pill,
     borderWidth: 1,
-    height: 42,
+    height: 38,
     justifyContent: 'center',
-    width: 42,
+    width: 38,
   },
   cardFooter: {
     borderColor: colors.border.card,
@@ -700,11 +705,15 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flexDirection: 'row',
     justifyContent: 'space-between',
+    minHeight: 32,
   },
   sectionTitle: {
-    ...typography.cardTitle,
     color: colors.text.primary,
     fontFamily: 'serif',
+    fontSize: 20,
+    fontWeight: '700',
+    letterSpacing: 0,
+    lineHeight: 25,
   },
   sectionAction: {
     ...typography.caption,
@@ -717,9 +726,9 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     flex: 1,
     gap: spacing.sm,
-    minHeight: 146,
+    minHeight: 132,
     minWidth: '46%',
-    padding: spacing.lg,
+    padding: spacing.md,
   },
   shortcutIcon: {
     alignItems: 'center',
@@ -727,9 +736,9 @@ const styles = StyleSheet.create({
     borderColor: colors.border.violet,
     borderRadius: radii.pill,
     borderWidth: 1,
-    height: 44,
+    height: 38,
     justifyContent: 'center',
-    width: 44,
+    width: 38,
   },
   shortcutTitle: {
     ...typography.button,
@@ -766,18 +775,19 @@ const styles = StyleSheet.create({
   },
   notice: {
     alignItems: 'center',
-    backgroundColor: 'rgba(246, 199, 106, 0.1)',
-    borderColor: colors.border.subtleGold,
+    alignSelf: 'flex-start',
+    backgroundColor: 'rgba(255, 255, 255, 0.045)',
+    borderColor: colors.border.card,
     borderRadius: radii.pill,
     borderWidth: 1,
     flexDirection: 'row',
-    gap: spacing.sm,
+    gap: spacing.xs,
     paddingHorizontal: spacing.md,
-    paddingVertical: spacing.sm,
+    paddingVertical: spacing.xs,
   },
   noticeText: {
     ...typography.caption,
-    color: colors.text.primary,
+    color: colors.text.muted,
   },
   disclaimer: {
     alignItems: 'flex-start',
@@ -802,15 +812,17 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     flexDirection: 'row',
     gap: spacing.md,
-    padding: spacing.md,
+    minHeight: 64,
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.sm,
   },
   infoIcon: {
     alignItems: 'center',
     backgroundColor: 'rgba(167, 139, 250, 0.1)',
     borderRadius: radii.pill,
-    height: 36,
+    height: 34,
     justifyContent: 'center',
-    width: 36,
+    width: 34,
   },
   infoText: {
     flex: 1,
@@ -829,9 +841,10 @@ const styles = StyleSheet.create({
     borderColor: colors.border.card,
     borderRadius: radii.md,
     borderWidth: 1,
-    gap: spacing.sm,
-    minHeight: layout.minTouchTarget,
-    padding: spacing.md,
+    gap: spacing.xs,
+    minHeight: 64,
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.sm,
   },
   staticFieldLabel: {
     alignItems: 'center',
@@ -847,7 +860,7 @@ const styles = StyleSheet.create({
     color: colors.text.primary,
   },
   cardAction: {
-    marginTop: spacing.lg,
+    marginTop: spacing.md,
   },
   loadingRow: {
     flexDirection: 'row',
@@ -869,10 +882,10 @@ const styles = StyleSheet.create({
     borderRadius: radii.xl,
     borderWidth: 1,
     justifyContent: 'space-between',
-    maxHeight: 560,
-    minHeight: 420,
+    maxHeight: 500,
+    minHeight: 380,
     overflow: 'hidden',
-    padding: spacing.xl,
+    padding: spacing.lg,
     ...shadows.gold,
   },
   shareMoon: {
@@ -889,7 +902,7 @@ const styles = StyleSheet.create({
   shareTitle: {
     color: colors.text.primary,
     fontFamily: 'serif',
-    fontSize: 34,
+    fontSize: 32,
     fontWeight: '700',
     letterSpacing: 0,
     lineHeight: 40,
@@ -916,6 +929,6 @@ const styles = StyleSheet.create({
     color: colors.text.primary,
   },
   list: {
-    gap: spacing.md,
+    gap: spacing.sm,
   },
 });

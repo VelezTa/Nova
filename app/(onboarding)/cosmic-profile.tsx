@@ -1,3 +1,3 @@
-import { CosmicProfilePreviewScreen } from '@/components/phase3-screens';
+import { OnboardingReviewScreen } from '@/features/onboarding/onboarding-screens';
 
-export default CosmicProfilePreviewScreen;
+export default OnboardingReviewScreen;
